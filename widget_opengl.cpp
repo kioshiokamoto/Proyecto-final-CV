@@ -27,13 +27,7 @@ static void qNormalizeAngle(int &angle)
         angle -= 360 * 16;
 }
 
-static void qNormalizeScala(float &scala)
-{
-    while (scala < 1)
-        scala += 2 * 7;
-    while (scala > 2 * 7)
-        scala -= 2 * 7;
-}
+
 void WidgetOpenGL::setXRotation(int angle)
 {
     qNormalizeAngle(angle);
@@ -61,16 +55,27 @@ void WidgetOpenGL::setZRotation(int angle)
         update();
     }
 }
+static void qNormalizeScala(float &scala, float valorScala)
+{
+    //Solucionar aqui inconvenientes con scala
+    /*basicamente el error es pq:
+        Si al escala es 1.15 y cambia a 1.20 crecera, si pasa de 1.20 a 1.15 tambien crecera
+        Si la escala es 0.9 y cambia a 0.5 disminuira, si pasa de 0.5 a 0.8 tb disminuira
+    */
+
+}
 void WidgetOpenGL::setScala(float scala)
 {
-    qNormalizeScala(scala);
+    qNormalizeScala(scala,valorScala);
     if (scala != valorScala) {
         emit ScalaChanged(scala);
         valorScala= scala;
+        base.scale(valorScala);
         update();
     }
 
 }
+
 
 
 void WidgetOpenGL::initializeGL()
@@ -89,7 +94,7 @@ void WidgetOpenGL::initializeGL()
                                        "uniform mat4 mv_matrix;\n"
                                        "void main() {\n"
                                        "    fragColor = vec4(color, 1.0);\n"
-                                       "    gl_Position = mv_matrix * vec4(position.x*0.2,position.y*0.2,position.z*0.2, 1.0);\n"
+                                       "    gl_Position = mv_matrix * vec4(position.x*0.05,position.y*0.1,position.z*0.1, 1.0);\n"
                                        "}\n"
                                        );
     m_program->addShaderFromSourceCode(QOpenGLShader::Fragment,
@@ -102,7 +107,7 @@ void WidgetOpenGL::initializeGL()
                                        );
     //m_program->setUniformValue()
     m_program->link();
-    m_program->bind(); // bind Shader (Do not release until VAO is created)
+    m_program->bind();
 
     float cubePositions[108] = { -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,
                 -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f,
@@ -117,7 +122,6 @@ void WidgetOpenGL::initializeGL()
                 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f
     };
 
-    // 6 triangles * 3 vertices * 3 values
     float pyramidPositions[54] = { -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 0.0f,
                 1.0f, 0.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
                 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 0.0f, 1.0f, 0.0f, -1.0f,
@@ -128,18 +132,17 @@ void WidgetOpenGL::initializeGL()
 
 
     //Inicializa la matrix
-
     base = QTransform();
-    //Altera valores de la figura
-
+    //Altera rotaciones iniciales de la figura
     base.rotate(xRot,1.0f,0.0f,0.0f);
     base.rotate(yRot,0.0f,1.0f,0.0f);
     base.rotate(zRot,0.0f,0.0f,1.0f);
-    base.scale(QVector3D(valorScala,valorScala,valorScala));
+    base.scale(valorScala);
+
+
 
     vao1.create();
     vao1.bind();
-    //QOpenGLBuffer m_vbo(QOpenGLBuffer::VertexBuffer);
     vbo.create();
     vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
     vbo.bind();
@@ -181,24 +184,15 @@ void WidgetOpenGL::paintGL()
     glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT);
     m_program->bind();
-
+    m_program->setUniformValue("mv_matrix",base);
     if (f1){
         vao1.bind();
-        base.rotate(xRot,1.0f,0.0f,0.0f);
-        base.rotate(yRot,0.0f,1.0f,0.0f);
-        base.rotate(zRot,0.0f,0.0f,1.0f);
-        base.scale(QVector3D(valorScala,valorScala,valorScala));
-        m_program->setUniformValue("mv_matrix",base);
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
     if (f2){
         vao2.bind();
-        base.rotate(xRot,1.0f,0.0f,0.0f);
-        base.rotate(yRot,0.0f,1.0f,0.0f);
-        base.rotate(zRot,0.0f,0.0f,1.0f);
-        base.scale(QVector3D(valorScala,valorScala,valorScala));
-        m_program->setUniformValue("mv_matrix",base);
         glDrawArrays(GL_TRIANGLES, 0, 18);
     }
+   valorScala=1;
 }
 

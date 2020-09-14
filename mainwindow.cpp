@@ -36,10 +36,6 @@ void MainWindow::on_radioButton_clicked()
     if (wogl->f2)
         wogl->f2 = false;
     wogl->f1 = true;
-    wogl->setXRotation(0);
-    wogl->setYRotation(0);
-    wogl->setZRotation(0);
-    wogl->setScala(1);
     wogl->update();
 
 }
@@ -49,10 +45,6 @@ void MainWindow::on_radioButton_2_clicked()
     if (wogl->f1)
         wogl->f1 = false;
     wogl->f2 = true;
-    wogl->setXRotation(0);
-    wogl->setYRotation(0);
-    wogl->setZRotation(0);
-    wogl->setScala(1);
     wogl->update();
 }
 
@@ -60,10 +52,6 @@ void MainWindow::on_radioButton_3_clicked()
 {
     wogl->f1 = false;
     wogl->f2 = false;
-    wogl->setXRotation(0);
-    wogl->setYRotation(0);
-    wogl->setZRotation(0);
-    wogl->setScala(1);
     wogl->update();
 }
 
@@ -78,6 +66,9 @@ void MainWindow::on_XSlider_valueChanged(int value)
     ui->xLabel->setText(texto);
 
     wogl->setXRotation(value);
+    wogl->base.rotate(wogl->xRot,1.0f,0.0f,0.0f);
+    wogl->base.rotate(wogl->yRot,0.0f,1.0f,0.0f);
+    wogl->base.rotate(wogl->zRot,0.0f,0.0f,1.0f);
     wogl->update();
 }
 
@@ -87,6 +78,9 @@ void MainWindow::on_YSlider_valueChanged(int value)
     ui->yLabel->setText(texto1);
 
     wogl->setYRotation(value);
+    wogl->base.rotate(wogl->xRot,1.0f,0.0f,0.0f);
+    wogl->base.rotate(wogl->yRot,0.0f,1.0f,0.0f);
+    wogl->base.rotate(wogl->zRot,0.0f,0.0f,1.0f);
     wogl->update();
 }
 
@@ -96,6 +90,9 @@ void MainWindow::on_ZSlider_valueChanged(int value)
     ui->zLabel->setText(texto2);
 
     wogl->setZRotation(value);
+    wogl->base.rotate(wogl->xRot,1.0f,0.0f,0.0f);
+    wogl->base.rotate(wogl->yRot,0.0f,1.0f,0.0f);
+    wogl->base.rotate(wogl->zRot,0.0f,0.0f,1.0f);
     wogl->update();
 }
 
@@ -108,6 +105,7 @@ void MainWindow::on_scalaSlider_valueChanged(int value)
     QString texto2 = QString::fromStdString(std::to_string(value/100.0));
     ui->scala->setText(texto2);
 
+    //wogl->base.scale(value/100.0);
     wogl->setScala(value/100.0);
     wogl->update();
 }

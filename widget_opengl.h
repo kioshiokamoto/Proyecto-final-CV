@@ -18,7 +18,6 @@ public:
     bool f1, f2;
 
     QMatrix4x4 base;
-
     int xRot;
     int yRot;
     int zRot;
