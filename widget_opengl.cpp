@@ -94,7 +94,7 @@ void WidgetOpenGL::initializeGL()
                                        "uniform mat4 mv_matrix;\n"
                                        "void main() {\n"
                                        "    fragColor = vec4(color, 1.0);\n"
-                                       "    gl_Position = mv_matrix * vec4(position.x*0.05,position.y*0.1,position.z*0.1, 1.0);\n"
+                                       "    gl_Position = mv_matrix * vec4(position.x*0.2,position.y*0.2,position.z*0.2, 1.0);\n"
                                        "}\n"
                                        );
     m_program->addShaderFromSourceCode(QOpenGLShader::Fragment,
@@ -139,6 +139,52 @@ void WidgetOpenGL::initializeGL()
     base.rotate(zRot,0.0f,0.0f,1.0f);
     base.scale(valorScala);
 
+    float ejeX[]= {
+        0.0,0.0,0.0,
+        5.0,0.0,0.0
+    };
+    vaoX.create();
+    vaoX.bind();
+    vboX.create();
+    vboX.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vboX.bind();
+    vboX.allocate(ejeX,sizeof (ejeX));
+    m_program->enableAttributeArray("position");
+    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+    vaoX.release();
+
+    float ejeY[]= {
+        0.0,0.0,0.0,
+        0.0,5.0,0.0
+    };
+    vaoY.create();
+    vaoY.bind();
+    vboY.create();
+    vboY.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vboY.bind();
+    vboY.allocate(ejeY,sizeof (ejeY));
+    m_program->enableAttributeArray("position");
+    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+    vaoY.release();
+
+    float ejeZ[]= {
+        0.0,0.0,0.0,
+        0.0,0.0,5.0
+    };
+    vaoZ.create();
+    vaoZ.bind();
+    vboZ.create();
+    vboZ.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vboZ.bind();
+    vboZ.allocate(ejeZ,sizeof (ejeZ));
+    m_program->enableAttributeArray("position");
+    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+    vaoZ.release();
+
+
+
+
+
 
 
     vao1.create();
@@ -178,18 +224,34 @@ void WidgetOpenGL::initializeGL()
 void WidgetOpenGL::resizeGL(int w, int h)
 {
 }
+void WidgetOpenGL::drawAxis(){
+    vaoX.bind();
+    m_program->setAttributeValue("color",QVector3D(1,0,0));
+    glDrawArrays(GL_LINE_LOOP, 0, 2);
+
+    vaoY.bind();
+    m_program->setAttributeValue("color",QVector3D(0,1,0));
+    glDrawArrays(GL_LINE_LOOP, 0, 2);
+
+    vaoZ.bind();
+    m_program->setAttributeValue("color",QVector3D(0,0,1));
+    glDrawArrays(GL_LINE_LOOP, 0, 2);
+}
 
 void WidgetOpenGL::paintGL()
 {
-    glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT);
     m_program->bind();
     m_program->setUniformValue("mv_matrix",base);
     if (f1){
+        drawAxis();
         vao1.bind();
+        m_program->setAttributeValue("color",QVector3D(0,1,0));
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
     if (f2){
+        drawAxis();
         vao2.bind();
         glDrawArrays(GL_TRIANGLES, 0, 18);
     }

@@ -28,9 +28,10 @@ protected:
     virtual void resizeGL(int w, int h) override;
     virtual void paintGL() override;
 private:
-    QOpenGLVertexArrayObject vao1, vao2;
-    QOpenGLBuffer vbo, _vbo;
+    QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2;
+    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo;
     QOpenGLShaderProgram *m_program;
+    void drawAxis();
 public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);
