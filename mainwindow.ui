@@ -259,6 +259,16 @@
      </item>
     </layout>
    </widget>
+   <widget class="ColorCombo" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>790</x>
+      <y>210</y>
+      <width>241</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -284,6 +294,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ColorCombo</class>
+   <extends>QComboBox</extends>
+   <header location="global">colorcombo.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
