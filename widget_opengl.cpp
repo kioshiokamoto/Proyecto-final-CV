@@ -11,7 +11,9 @@ WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{
     yRot = 0;
     zRot = 0;
     valorScala=1;
-
+    myTorus = Torus(0.5f, 0.2f, 48);
+    int numTorusVertices = myTorus.getNumVertices();
+    int numTorusIndices = myTorus.getNumIndices();;
 
 }
 
@@ -76,6 +78,75 @@ void WidgetOpenGL::setScala(float scala)
 
 }
 
+void WidgetOpenGL::setupVertices() {
+    std::vector<int> ind = myTorus.getIndices();
+    std::vector<QVector3D> vert = myTorus.getVertices();
+    std::vector<QVector2D> tex = myTorus.getTexCoords();
+    std::vector<QVector3D> norm = myTorus.getNormals();
+
+    std::vector<float> pvalues;
+    std::vector<float> tvalues;
+    std::vector<float> nvalues;
+
+    for (int i = 0; i < myTorus.getNumVertices(); i++) {
+        pvalues.push_back(vert[i].x());
+        pvalues.push_back(vert[i].y());
+        pvalues.push_back(vert[i].z());
+        tvalues.push_back(tex[i].x());
+        tvalues.push_back(tex[i].y());
+        nvalues.push_back(norm[i].x());
+        nvalues.push_back(norm[i].y());
+        nvalues.push_back(norm[i].z());
+    }
+    vaoTorus.create();
+    vaoTorus.bind();
+    vboTorus->create();
+    vboTorus[0].setUsagePattern(QOpenGLBuffer::StaticDraw); //Modificar
+    vboTorus[0].bind();
+    vboTorus[0].allocate(pvalues.data(),sizeof(pvalues));
+    vboTorus[1].setUsagePattern(QOpenGLBuffer::StaticDraw); //Modificar
+    vboTorus[1].bind();
+    vboTorus[1].allocate(tvalues.data(),sizeof(tvalues));
+    vboTorus[2].setUsagePattern(QOpenGLBuffer::StaticDraw); //Modificar
+    vboTorus[2].bind();
+    vboTorus[2].allocate(nvalues.data(),sizeof(nvalues));
+    vboTorus[3].setUsagePattern(QOpenGLBuffer::StaticDraw); //Modificar
+    vboTorus[3].bind();
+    vboTorus[3].allocate(ind.data(),sizeof(ind));
+
+
+
+
+
+
+/*
+
+    glGenBuffers(numVBOs, vbo);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER,
+                 pvalues.size() * 4,
+                 &pvalues[0],
+            GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER,
+                 tvalues.size() * 4,
+                 &tvalues[0],
+            GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+    glBufferData(GL_ARRAY_BUFFER,
+                 nvalues.size() * 4,
+                 &nvalues[0],
+            GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                 ind.size() * 4,
+                 &ind[0],
+            GL_STATIC_DRAW);*/
+}
 
 
 void WidgetOpenGL::initializeGL()
@@ -129,7 +200,6 @@ void WidgetOpenGL::initializeGL()
                 -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f,
                 -1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f
     };
-
 
     //Inicializa la matrix
     base = QTransform();
@@ -256,5 +326,21 @@ void WidgetOpenGL::paintGL()
         glDrawArrays(GL_TRIANGLES, 0, 18);
     }
    valorScala=1;
+   /*
+   glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   glEnableVertexAttribArray(0);
+
+   glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+   glEnableVertexAttribArray(1);
+
+   glEnable(GL_CULL_FACE);
+   glFrontFace(GL_CCW);
+   glEnable(GL_DEPTH_TEST);
+   glDepthFunc(GL_LEQUAL);
+
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
+   glDrawElements(GL_TRIANGLES, numTorusIndices, GL_UNSIGNED_INT, 0);*/
 }
 
