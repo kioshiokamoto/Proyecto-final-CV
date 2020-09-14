@@ -7,9 +7,12 @@ WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{
 {
     f1 = false;
     f2 = false;
-    xRot = 30;
-    yRot = 30;
+    xRot = 0;
+    yRot = 0;
     zRot = 0;
+    valorScala=1;
+
+
 }
 
 WidgetOpenGL::~WidgetOpenGL()
@@ -23,6 +26,14 @@ static void qNormalizeAngle(int &angle)
     while (angle > 360 * 16)
         angle -= 360 * 16;
 }
+
+static void qNormalizeScala(float &scala)
+{
+    while (scala < 1)
+        scala += 2 * 7;
+    while (scala > 2 * 7)
+        scala -= 2 * 7;
+}
 void WidgetOpenGL::setXRotation(int angle)
 {
     qNormalizeAngle(angle);
@@ -30,7 +41,6 @@ void WidgetOpenGL::setXRotation(int angle)
         xRot = angle;
         emit xRotationChanged(angle);
         update();
-        std::cout<<"ingresa";
     }
 }
 void WidgetOpenGL::setYRotation(int angle)
@@ -51,10 +61,25 @@ void WidgetOpenGL::setZRotation(int angle)
         update();
     }
 }
+void WidgetOpenGL::setScala(float scala)
+{
+    qNormalizeScala(scala);
+    if (scala != valorScala) {
+        emit ScalaChanged(scala);
+        valorScala= scala;
+        update();
+    }
+
+}
 
 
 void WidgetOpenGL::initializeGL()
 {
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
     m_program = new QOpenGLShaderProgram();
     m_program->addShaderFromSourceCode(QOpenGLShader::Vertex,
                                        "#version 450\n" //GLSL version 1.4
@@ -103,13 +128,14 @@ void WidgetOpenGL::initializeGL()
 
 
     //Inicializa la matrix
+
     base = QTransform();
     //Altera valores de la figura
 
     base.rotate(xRot,1.0f,0.0f,0.0f);
     base.rotate(yRot,0.0f,1.0f,0.0f);
     base.rotate(zRot,0.0f,0.0f,1.0f);
-    base.scale(QVector3D(2,2,2));
+    base.scale(QVector3D(valorScala,valorScala,valorScala));
 
     vao1.create();
     vao1.bind();
@@ -120,6 +146,7 @@ void WidgetOpenGL::initializeGL()
     vbo.allocate(cubePositions, sizeof (cubePositions));
     m_program->enableAttributeArray("position");
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+
     vao1.release();
 
 
@@ -154,33 +181,24 @@ void WidgetOpenGL::paintGL()
     glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
     glClear( GL_COLOR_BUFFER_BIT);
     m_program->bind();
+
     if (f1){
         vao1.bind();
-
+        base.rotate(xRot,1.0f,0.0f,0.0f);
+        base.rotate(yRot,0.0f,1.0f,0.0f);
+        base.rotate(zRot,0.0f,0.0f,1.0f);
+        base.scale(QVector3D(valorScala,valorScala,valorScala));
+        m_program->setUniformValue("mv_matrix",base);
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
     if (f2){
         vao2.bind();
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        base.rotate(xRot,1.0f,0.0f,0.0f);
+        base.rotate(yRot,0.0f,1.0f,0.0f);
+        base.rotate(zRot,0.0f,0.0f,1.0f);
+        base.scale(QVector3D(valorScala,valorScala,valorScala));
+        m_program->setUniformValue("mv_matrix",base);
+        glDrawArrays(GL_TRIANGLES, 0, 18);
     }
 }
 
-void WidgetOpenGL::mousePressEvent(QMouseEvent *event)
-{
-    lastPos = event->pos();
-}
-
-void WidgetOpenGL::mouseMoveEvent(QMouseEvent *event)
-{
-    int dx = event->x() - lastPos.x();
-    int dy = event->y() - lastPos.y();
-
-    if (event->buttons() & Qt::LeftButton) {
-        setXRotation(xRot + 8 * dy);
-        setYRotation(yRot + 8 * dx);
-    } else if (event->buttons() & Qt::RightButton) {
-        setXRotation(xRot + 8 * dy);
-        setZRotation(zRot + 8 * dx);
-    }
-    lastPos = event->pos();
-}

@@ -28,6 +28,16 @@ private slots:
 
     void on_actionSalir_triggered();
 
+    void on_XSlider_valueChanged(int value);
+
+    void on_YSlider_valueChanged(int value);
+
+    void on_ZSlider_valueChanged(int value);
+
+    void on_XSlider_2_valueChanged(int value);
+
+    void on_scalaSlider_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
     WidgetOpenGL *wogl;

@@ -22,14 +22,12 @@ public:
     int xRot;
     int yRot;
     int zRot;
-    QPoint lastPos;
+    float valorScala;
 
 protected:
     virtual void initializeGL() override;
     virtual void resizeGL(int w, int h) override;
     virtual void paintGL() override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
 private:
     QOpenGLVertexArrayObject vao1, vao2;
     QOpenGLBuffer vbo, _vbo;
@@ -38,9 +36,11 @@ public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);
     void setZRotation(int angle);
+    void setScala(float scala);
 signals:
     void xRotationChanged(int angle);
     void yRotationChanged(int angle);
     void zRotationChanged(int angle);
+    void ScalaChanged(float scala);
 };
 #endif // WIDGETTRIANGLE_H
