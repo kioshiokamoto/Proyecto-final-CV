@@ -11,6 +11,9 @@ WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{
 {
     f1 = false;
     f2 = false;
+    f3 = false;
+    f4 = false;
+    f5 = false;
     xRot = 0;
     yRot = 0;
     zRot = 0;
@@ -120,43 +123,13 @@ void WidgetOpenGL::setupVertices() {
 
 
 
-
-
-
-/*
-
-    glGenBuffers(numVBOs, vbo);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER,
-                 pvalues.size() * 4,
-                 &pvalues[0],
-            GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER,
-                 tvalues.size() * 4,
-                 &tvalues[0],
-            GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-    glBufferData(GL_ARRAY_BUFFER,
-                 nvalues.size() * 4,
-                 &nvalues[0],
-            GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                 ind.size() * 4,
-                 &ind[0],
-            GL_STATIC_DRAW);*/
 }
 
 void WidgetOpenGL::drawSphere(){
 
-    float r=20.0;
-    int angleSpan = 10; //弧度 = 角度 * PI / 180
-    for(int vAngle = -90; vAngle < 90; vAngle = vAngle + angleSpan){ //生成球面顶点
+    float r=1.0;
+    int angleSpan = 10;
+    for(int vAngle = -90; vAngle < 90; vAngle = vAngle + angleSpan){
         for(int hAngle = 0; hAngle <= 360; hAngle = hAngle + angleSpan){
             float x0 = r * qCos(vAngle * PI / 180) * qCos(hAngle * PI / 180);
             float y0 = r * qCos(vAngle * PI / 180) * qSin(hAngle * PI / 180);
@@ -184,11 +157,10 @@ void WidgetOpenGL::drawSphere(){
     vboSphere.create();
     vboSphere.setUsagePattern(QOpenGLBuffer::StaticDraw);
     vboSphere.bind();
-    vboSphere.allocate(m_points.constData(),m_points.count() * sizeof (GLfloat));
+    vboSphere.allocate(m_points.constData(),m_points.size() * sizeof (GLfloat));
     m_program->enableAttributeArray("position");
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
     vaoSphere.release();
-
 
 
 }
@@ -326,12 +298,12 @@ void WidgetOpenGL::initializeGL()
 
 
     vao2.release();
-
+    drawSphere();
     //Para pasar color a shader
     m_program->setAttributeValue("color",QVector3D(0,1,0));
     //Pasar escalamiento y rotacion a shader
     m_program->setUniformValue("mv_matrix",base);
-    drawSphere();
+
     m_program->release();
 }
 
@@ -358,40 +330,29 @@ void WidgetOpenGL::paintGL()
     glClear( GL_COLOR_BUFFER_BIT);
     m_program->bind();
     m_program->setUniformValue("mv_matrix",base);
+    drawAxis();
     if (f1){
-        drawAxis();
         vao1.bind();
         m_program->setAttributeValue("color",QVector3D(0,1,0));
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
     if (f2){
-
-        drawAxis();
-        //vao2.bind();
-        //glDrawArrays(GL_TRIANGLES, 0, 18);
         vaoSphere.bind();
-        m_program->enableAttributeArray(0);
-        m_program->setAttributeBuffer(0,GL_FLOAT,0,3,0);
-        m_program->setAttributeValue("color",QVector3D(0,1,0));
-        glDrawArrays(GL_TRIANGLES,0,m_points.count() / 3);
+        m_program->setAttributeValue("color",QVector3D(1,0,0));
+        glDrawArrays(GL_TRIANGLES,0,m_points.count()/3);
+
+    }
+    if(f3){
+        vao2.bind();
+        glDrawArrays(GL_TRIANGLES, 0, 18);
+    }
+    if(f4){
+
+    }
+    if(f5){
 
     }
    valorScala=1;
-   /*
-   glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-   glEnableVertexAttribArray(0);
 
-   glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-   glEnableVertexAttribArray(1);
-
-   glEnable(GL_CULL_FACE);
-   glFrontFace(GL_CCW);
-   glEnable(GL_DEPTH_TEST);
-   glDepthFunc(GL_LEQUAL);
-
-   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
-   glDrawElements(GL_TRIANGLES, numTorusIndices, GL_UNSIGNED_INT, 0);*/
 }
 

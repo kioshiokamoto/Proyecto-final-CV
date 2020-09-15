@@ -31,7 +31,7 @@
       <x>770</x>
       <y>30</y>
       <width>281</width>
-      <height>114</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="title">
@@ -48,7 +48,21 @@
      <item>
       <widget class="QRadioButton" name="radioButton_2">
        <property name="text">
-        <string>Piramide</string>
+        <string>Esfera</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton_4">
+       <property name="text">
+        <string>Cono</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton_5">
+       <property name="text">
+        <string>Cilindro</string>
        </property>
       </widget>
      </item>

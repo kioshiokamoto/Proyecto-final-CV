@@ -33,8 +33,11 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
 void MainWindow::on_radioButton_clicked()
 {
 
-    if (wogl->f2)
-        wogl->f2 = false;
+    if (wogl->f2) wogl->f2 = false;
+    if (wogl->f3) wogl->f3 = false;
+    if (wogl->f4) wogl->f4 = false;
+    if (wogl->f5) wogl->f5 = false;
+
     wogl->f1 = true;
     wogl->update();
 
@@ -42,12 +45,32 @@ void MainWindow::on_radioButton_clicked()
 
 void MainWindow::on_radioButton_2_clicked()
 {
-    if (wogl->f1)
-        wogl->f1 = false;
+    if (wogl->f1) wogl->f1 = false;
+    if (wogl->f3) wogl->f3 = false;
+    if (wogl->f4) wogl->f4 = false;
+    if (wogl->f5) wogl->f5 = false;
     wogl->f2 = true;
     wogl->update();
 }
 
+void MainWindow::on_radioButton_4_clicked()
+{
+    if (wogl->f1) wogl->f1 = false;
+    if (wogl->f2) wogl->f2 = false;
+    if (wogl->f4) wogl->f4 = false;
+    if (wogl->f5) wogl->f5 = false;
+    wogl->f3 = true;
+    wogl->update();
+}
+void MainWindow::on_radioButton_5_clicked()
+{
+    if (wogl->f1) wogl->f1 = false;
+    if (wogl->f2) wogl->f2 = false;
+    if (wogl->f3) wogl->f3 = false;
+    if (wogl->f5) wogl->f5 = false;
+    wogl->f4 = true;
+    wogl->update();
+}
 void MainWindow::on_radioButton_3_clicked()
 {
     wogl->f1 = false;
@@ -109,3 +132,7 @@ void MainWindow::on_scalaSlider_valueChanged(int value)
     wogl->setScala(value/100.0);
     wogl->update();
 }
+
+
+
+

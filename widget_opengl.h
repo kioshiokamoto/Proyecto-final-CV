@@ -16,7 +16,7 @@ class WidgetOpenGL : public QOpenGLWidget
 public:
     WidgetOpenGL(QWidget *parent = nullptr  );
     ~WidgetOpenGL();
-    bool f1, f2;
+    bool f1, f2 ,f3 ,f4 ,f5 ;
 
     QMatrix4x4 base;
     int xRot;
