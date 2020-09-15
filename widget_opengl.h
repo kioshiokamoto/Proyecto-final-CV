@@ -8,7 +8,7 @@
 #include <QGLFunctions>
 #include <QtOpenGL>
 #include "Torus.h"
-
+#define PI 3.14159265f
 class WidgetOpenGL : public QOpenGLWidget
 {
     Q_OBJECT
@@ -24,17 +24,20 @@ public:
     int zRot;
     float valorScala;
     Torus myTorus;
+    QVector<GLfloat> m_points;
 
 protected:
     virtual void initializeGL() override;
     virtual void resizeGL(int w, int h) override;
     virtual void paintGL() override;
 private:
-    QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaoTorus;
-    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[4];
+
+    QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaoTorus,vaoSphere;
+    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[4], vboSphere;
     QOpenGLShaderProgram *m_program;
     void drawAxis();
     void setupVertices();
+    void drawSphere();
 public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);
