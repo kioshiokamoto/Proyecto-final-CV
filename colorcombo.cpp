@@ -71,7 +71,6 @@ void ColorCombo::displayColor(const QColor &color)
     painter.fillRect(rect(),color);
     setPixmap(QPixmap::fromImage(imgColor));
     //std::cout<<"Color es -> "<< mCurrentColor.name().toStdString() <<std::endl ;
-    hex = mCurrentColor.toRgb();
 
 
 }

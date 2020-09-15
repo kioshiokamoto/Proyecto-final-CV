@@ -25,6 +25,7 @@ public:
     float valorScala;
     Torus myTorus;
     QVector<GLfloat> m_points;
+    QVector<GLfloat> m_points_Cylinder;
     int numTorusVertices;
     int numTorusIndices;
 
@@ -34,12 +35,13 @@ protected:
     virtual void paintGL() override;
 private:
 
-    QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaoTorus,vaoSphere;
-    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[4], vboSphere;
+    QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaoTorus,vaoSphere,vaoCylinder;
+    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[4], vboSphere,vboCylinder;
     QOpenGLShaderProgram *m_program;
     void drawAxis();
     void setupVertices();
     void drawSphere();
+    void drawCylinder();
 public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);

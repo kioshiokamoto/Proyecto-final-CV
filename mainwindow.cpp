@@ -32,7 +32,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_radioButton_clicked()
 {
-    std::cout<<color.toStdString();
+    //std::cout<<color.toStdString();
     if (wogl->f2) wogl->f2 = false;
     if (wogl->f3) wogl->f3 = false;
     if (wogl->f4) wogl->f4 = false;
@@ -86,6 +86,9 @@ void MainWindow::on_radioButton_3_clicked()
 {
     wogl->f1 = false;
     wogl->f2 = false;
+    wogl->f3 = false;
+    wogl->f4 = false;
+    wogl->f5 = false;
     wogl->update();
 }
 

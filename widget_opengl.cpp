@@ -126,7 +126,25 @@ void WidgetOpenGL::setupVertices() {
 
 
 }
+void WidgetOpenGL::drawCylinder(){
+    int i = 0;
+    for (i = 0; i <= 360; i += 15){
+         float p = i * 3.14 / 180;
+         m_points_Cylinder<<sin(p)<<cos(p)<<0.0f;
 
+         m_points_Cylinder<<sin(p)<<cos(p)<<1.0f;
+    }
+    vaoCylinder.create();
+    vaoCylinder.bind();
+    vboCylinder.create();
+    vboCylinder.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbo.bind();
+    vbo.allocate(m_points_Cylinder.constData(),m_points_Cylinder.size() * sizeof (GLfloat));
+    m_program->enableAttributeArray("position");
+    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+    vaoCylinder.release();
+
+}
 void WidgetOpenGL::drawSphere(){
 
     float r=1.0;
@@ -273,20 +291,6 @@ void WidgetOpenGL::initializeGL()
 
 
 
-
-
-    vao1.create();
-    vao1.bind();
-    vbo.create();
-    vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    vbo.bind();
-    vbo.allocate(cubePositions, sizeof (cubePositions));
-    m_program->enableAttributeArray("position");
-    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
-
-    vao1.release();
-
-
     vao2.create();
     vao2.bind();
     _vbo.create();
@@ -300,11 +304,28 @@ void WidgetOpenGL::initializeGL()
 
 
     vao2.release();
+
+
+
+
+    vao1.create();
+    vao1.bind();
+    vbo.create();
+    vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbo.bind();
+    vbo.allocate(cubePositions, sizeof (cubePositions));
+    m_program->enableAttributeArray("position");
+    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+
+    vao1.release();
+
     drawSphere();
+    //drawCylinder();
     //Para pasar color a shader
     m_program->setAttributeValue("color",QVector3D(0,1,0));
     //Pasar escalamiento y rotacion a shader
     m_program->setUniformValue("mv_matrix",base);
+
 
     m_program->release();
 }
@@ -337,6 +358,8 @@ void WidgetOpenGL::paintGL()
         vao1.bind();
         m_program->setAttributeValue("color",QVector3D(0,1,0));
         glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
     }
     if (f2){
         vaoSphere.bind();
@@ -346,9 +369,14 @@ void WidgetOpenGL::paintGL()
     }
     if(f3){
         vao2.bind();
+        m_program->setAttributeValue("color",QVector3D(1,0,0));
         glDrawArrays(GL_TRIANGLES, 0, 18);
     }
     if(f4){
+        /*
+        vaoCylinder.bind();
+        m_program->setAttributeValue("color",QVector3D(1,0,0));
+        glDrawArrays(GL_QUAD_STRIP,0,m_points.count()/3); */
 
     }
     if(f5){
