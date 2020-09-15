@@ -354,7 +354,7 @@ void WidgetOpenGL::paintGL()
     if(f5){
 
     }
-   valorScala=1;
+   //valorScala=1;
 
 }
 
