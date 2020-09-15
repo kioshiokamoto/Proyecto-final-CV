@@ -17,6 +17,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->yLabel->setText("0");
     ui->zLabel->setText("0");
     ui->scala->setText("1.00");
+
+    color = ui->comboBox->currentColor().name();
+    //modificar
+
 }
 
 MainWindow::~MainWindow()
@@ -25,14 +29,10 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::on_horizontalSlider_valueChanged(int value)
-{
-
-}
 
 void MainWindow::on_radioButton_clicked()
 {
-
+    std::cout<<color.toStdString();
     if (wogl->f2) wogl->f2 = false;
     if (wogl->f3) wogl->f3 = false;
     if (wogl->f4) wogl->f4 = false;
@@ -71,6 +71,17 @@ void MainWindow::on_radioButton_5_clicked()
     wogl->f4 = true;
     wogl->update();
 }
+void MainWindow::on_radioButton_6_clicked()
+{
+    if (wogl->f1) wogl->f1 = false;
+    if (wogl->f2) wogl->f2 = false;
+    if (wogl->f3) wogl->f3 = false;
+    if (wogl->f4) wogl->f5 = false;
+    wogl->f5 = true;
+    wogl->update();
+}
+
+
 void MainWindow::on_radioButton_3_clicked()
 {
     wogl->f1 = false;
@@ -119,19 +130,16 @@ void MainWindow::on_ZSlider_valueChanged(int value)
     wogl->update();
 }
 
-void MainWindow::on_XSlider_2_valueChanged(int value)
-{
-}
 
 void MainWindow::on_scalaSlider_valueChanged(int value)
 {
     QString texto2 = QString::fromStdString(std::to_string(value/100.0));
     ui->scala->setText(texto2);
-
-    //wogl->base.scale(value/100.0);
     wogl->setScala(value/100.0);
     wogl->update();
 }
+
+
 
 
 

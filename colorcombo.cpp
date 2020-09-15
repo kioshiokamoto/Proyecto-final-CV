@@ -38,6 +38,8 @@ void ColorCombo::mousePressEvent(QMouseEvent *e)
     mListWidget->setMinimumWidth(width());
     mMenu->popup(parentWidget()->mapToGlobal(pos()));
     QLabel::mousePressEvent(e);
+
+
 }
 QListWidget *ColorCombo::makeListWidget()
 {
@@ -68,6 +70,9 @@ void ColorCombo::displayColor(const QColor &color)
 
     painter.fillRect(rect(),color);
     setPixmap(QPixmap::fromImage(imgColor));
+    //std::cout<<"Color es -> "<< mCurrentColor.name().toStdString() <<std::endl ;
+    hex = mCurrentColor.toRgb();
+
 
 }
 void ColorCombo::assignColors(QListWidget *listWidget)

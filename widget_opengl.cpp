@@ -19,8 +19,8 @@ WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{
     zRot = 0;
     valorScala=1;
     myTorus = Torus(0.5f, 0.2f, 48);
-    int numTorusVertices = myTorus.getNumVertices();
-    int numTorusIndices = myTorus.getNumIndices();;
+    numTorusVertices = myTorus.getNumVertices();
+    numTorusIndices = myTorus.getNumIndices();
 
 }
 
@@ -354,7 +354,6 @@ void WidgetOpenGL::paintGL()
     if(f5){
 
     }
-   //valorScala=1;
 
 }
 

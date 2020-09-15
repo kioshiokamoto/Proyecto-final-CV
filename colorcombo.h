@@ -17,6 +17,8 @@ public:
     QColor currentColor() const{
         return mCurrentColor;
     }
+
+
 signals:
     void currentColorChanged(const QColor &color);
 
@@ -30,6 +32,7 @@ private:
     QListWidget *makeListWidget();
     void displayColor(const QColor &color);
     void assignColors(QListWidget *listWidget);
+
 };
 
 #endif // COLORCOMBO_H

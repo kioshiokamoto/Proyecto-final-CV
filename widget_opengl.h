@@ -25,6 +25,8 @@ public:
     float valorScala;
     Torus myTorus;
     QVector<GLfloat> m_points;
+    int numTorusVertices;
+    int numTorusIndices;
 
 protected:
     virtual void initializeGL() override;
