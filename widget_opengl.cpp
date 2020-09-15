@@ -64,24 +64,26 @@ void WidgetOpenGL::setZRotation(int angle)
         update();
     }
 }
-static void qNormalizeScala(float &scala, float valorScala)
+void qNormalizeScala(float scala, float *valorScala)
 {
-    //Solucionar aqui inconvenientes con scala
-    /*basicamente el error es pq:
-        Si al escala es 1.15 y cambia a 1.20 crecera, si pasa de 1.20 a 1.15 tambien crecera
-        Si la escala es 0.9 y cambia a 0.5 disminuira, si pasa de 0.5 a 0.8 tb disminuira
-    */
+
+    *valorScala = scala;
 
 }
 void WidgetOpenGL::setScala(float scala)
 {
-    qNormalizeScala(scala,valorScala);
+    float aux = 1.0/scala;
     if (scala != valorScala) {
-        emit ScalaChanged(scala);
+        float aux = 1.0/valorScala;
+        base.scale(aux,aux,aux);
         valorScala= scala;
-        base.scale(valorScala);
+        emit ScalaChanged(scala);
+        base.scale(valorScala,valorScala,valorScala);
         update();
+
     }
+    qNormalizeScala(scala,&valorScala);
+
 
 }
 
