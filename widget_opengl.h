@@ -35,13 +35,14 @@ protected:
     virtual void paintGL() override;
 private:
 
-    QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaoTorus,vaoSphere,vaoCylinder;
-    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[4], vboSphere,vboCylinder;
+    QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaoTorus,vaoSphere,vaoCylinder,vaoCono,vaoCono1;
+    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[4], vboSphere,vboCylinder,vboCono1,vboCono2;
     QOpenGLShaderProgram *m_program;
     void drawAxis();
     void setupVertices();
     void drawSphere();
     void drawCylinder();
+    void drawCono();
 public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);

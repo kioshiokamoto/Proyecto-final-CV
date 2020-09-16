@@ -126,6 +126,112 @@ void WidgetOpenGL::setupVertices() {
 
 
 }
+void WidgetOpenGL::drawCono(){
+    float conePositions[150]={0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+                    0.0f,0.0f, 1.0f, (float)sin(0.261667)*1.0f, (float)cos(0.261667)*1.0f, 0.0f, 0.0f, 0.0f, 1.0f, (float)sin(0.523333)*1.0f,(float) cos(0.523333)*1.0f, 0.0f,
+                    0.0f, 0.0f, 1.0f, (float)sin(0.785)*1.0f, (float)cos(0.785)*1.0f, 0.0f, 0.0f, 0.0f, 1.0f, (float)sin(1.04667)*1.0f, (float)cos(1.04667)*1.0f, 0.0f,
+                    0.0f, 0.0f, 1.0f,(float)sin(1.30833)*1.0f, (float)cos(1.30833)*1.0f, 0.0f, 0.0f, 0.0f,1.0f, (float)sin(1.57)*1.0f,(float) cos(1.57)*1.0f, 0.0f,
+                    0.0f, 0.0f, 1.0f, (float)sin(1.83167)*1.0f,(float) cos(1.83167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float) sin(2.09333)*1.0f, (float)cos(2.09333)*1.0f, 0.0f ,
+                    0.0f ,0.0f, 1.0f,(float)sin(2.355)*1.0f,(float) cos(2.355)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(2.61667)*1.0f, (float)cos(2.61667)*1.0f, 0.0f ,
+                    0.0f ,0.0f, 1.0f,(float)sin(2.87833)*1.0f, (float)cos(2.87833)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(3.14)*1.0f,(float) cos(3.14)*1.0f, 0.0f ,
+                    0.0f ,0.0f, 1.0f,(float)sin(3.40167)*1.0f,(float) cos(3.40167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(3.66333)*1.0f, (float)cos(3.66333)*1.0f, 0.0f ,
+                    0.0f ,0.0f, 1.0f,(float)sin(3.925)*1.0f, (float)cos(3.925)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(4.18667)*1.0f, (float)cos(4.18667)*1.0f, 0.0f ,
+                    0.0f ,0.0f, 1.0f,(float)sin(4.44833)*1.0f, (float)cos(4.44833)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(4.71)*1.0f, (float)cos(4.71)*1.0f, 0.0f ,
+                    0.0f ,0.0f, 1.0f,(float)sin(4.97167)*1.0f,(float) cos(4.97167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(5.23333)*1.0f, (float)cos(5.23333)*1.0f, 0.0f ,
+                    0.0f ,0.0f, 1.0f,(float)sin(5.495)*1.0f, (float)cos(5.495)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(5.75667)*1.0f, (float)cos(5.75667)*1.0f, 0.0f ,
+                    0.0f ,0.0f, 1.0f,(float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f, 0.0f ,0.0f, 1.0f,(float)sin(6.28)*1.0f, (float)cos(6.28)*1.0f, 0.0f
+
+        };
+        //ESTE ES LA TAPITA DEL CONO
+        float circlePositions[81]={0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+                         (float)sin(0.261667)*1.0f, (float) cos(0.261667)*1.0f, 0.0f, (float) sin(0.523333)*1.0f, (float)cos(0.523333)*1.0f, 0.0f,
+                        (float) sin(0.785)*1.0f, (float)cos(0.785)*1.0f, 0.0f,  (float)sin(1.04667)*1.0f, (float)cos(1.04667)*1.0f, 0.0f,
+                        (float)sin(1.30833)*1.0f, (float)cos(1.30833)*1.0f, 0.0f,  (float)sin(1.57)*1.0f, (float)cos(1.57)*1.0f, 0.0f,
+                         (float)sin(1.83167)*1.0f, (float)cos(1.83167)*1.0f, 0.0f,(float) sin(2.09333)*1.0f, (float)cos(2.09333)*1.0f, 0.0f ,
+                        (float)sin(2.355)*1.0f,(float) cos(2.355)*1.0f, 0.0f,(float)sin(2.61667)*1.0f, (float)cos(2.61667)*1.0f, 0.0f ,
+                        (float)sin(2.87833)*1.0f,(float) cos(2.87833)*1.0f, 0.0f,(float)sin(3.14)*1.0f, (float)cos(3.14)*1.0f, 0.0f ,
+                        (float)sin(3.40167)*1.0f, (float)cos(3.40167)*1.0f, 0.0f,(float)sin(3.66333)*1.0f, (float)cos(3.66333)*1.0f, 0.0f ,
+                        (float)sin(3.925)*1.0f, (float)cos(3.925)*1.0f, 0.0f,(float)sin(4.18667)*1.0f, (float)cos(4.18667)*1.0f, 0.0f ,
+                        (float)sin(4.44833)*1.0f, (float)cos(4.44833)*1.0f, 0.0f,(float)sin(4.71)*1.0f, (float)cos(4.71)*1.0f, 0.0f ,
+                        (float)sin(4.97167)*1.0f,(float) cos(4.97167)*1.0f, 0.0f,(float)sin(5.23333)*1.0f, (float)cos(5.23333)*1.0f, 0.0f ,
+                        (float)sin(5.495)*1.0f, (float)cos(5.495)*1.0f, 0.0f,(float)sin(5.75667)*1.0f,(float) cos(5.75667)*1.0f, 0.0f ,
+                        (float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f,(float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f
+                        ,(float)sin(6.28)*1.0f, (float)cos(6.28)*1.0f, 0.0f
+
+            };
+        float cono[] ={0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+                       0.0f,0.0f, 1.0f, (float)sin(0.261667)*1.0f, (float)cos(0.261667)*1.0f, 0.0f, 0.0f, 0.0f, 1.0f, (float)sin(0.523333)*1.0f,(float) cos(0.523333)*1.0f, 0.0f,
+                       0.0f, 0.0f, 1.0f, (float)sin(0.785)*1.0f, (float)cos(0.785)*1.0f, 0.0f, 0.0f, 0.0f, 1.0f, (float)sin(1.04667)*1.0f, (float)cos(1.04667)*1.0f, 0.0f,
+                       0.0f, 0.0f, 1.0f,(float)sin(1.30833)*1.0f, (float)cos(1.30833)*1.0f, 0.0f, 0.0f, 0.0f,1.0f, (float)sin(1.57)*1.0f,(float) cos(1.57)*1.0f, 0.0f,
+                       0.0f, 0.0f, 1.0f, (float)sin(1.83167)*1.0f,(float) cos(1.83167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float) sin(2.09333)*1.0f, (float)cos(2.09333)*1.0f, 0.0f ,
+                       0.0f ,0.0f, 1.0f,(float)sin(2.355)*1.0f,(float) cos(2.355)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(2.61667)*1.0f, (float)cos(2.61667)*1.0f, 0.0f ,
+                       0.0f ,0.0f, 1.0f,(float)sin(2.87833)*1.0f, (float)cos(2.87833)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(3.14)*1.0f,(float) cos(3.14)*1.0f, 0.0f ,
+                       0.0f ,0.0f, 1.0f,(float)sin(3.40167)*1.0f,(float) cos(3.40167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(3.66333)*1.0f, (float)cos(3.66333)*1.0f, 0.0f ,
+                       0.0f ,0.0f, 1.0f,(float)sin(3.925)*1.0f, (float)cos(3.925)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(4.18667)*1.0f, (float)cos(4.18667)*1.0f, 0.0f ,
+                       0.0f ,0.0f, 1.0f,(float)sin(4.44833)*1.0f, (float)cos(4.44833)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(4.71)*1.0f, (float)cos(4.71)*1.0f, 0.0f ,
+                       0.0f ,0.0f, 1.0f,(float)sin(4.97167)*1.0f,(float) cos(4.97167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(5.23333)*1.0f, (float)cos(5.23333)*1.0f, 0.0f ,
+                       0.0f ,0.0f, 1.0f,(float)sin(5.495)*1.0f, (float)cos(5.495)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(5.75667)*1.0f, (float)cos(5.75667)*1.0f, 0.0f ,
+                       0.0f ,0.0f, 1.0f,(float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f, 0.0f ,0.0f, 1.0f,(float)sin(6.28)*1.0f, (float)cos(6.28)*1.0f, 0.0f,
+                       0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+                                                (float)sin(0.261667)*1.0f, (float) cos(0.261667)*1.0f, 0.0f, (float) sin(0.523333)*1.0f, (float)cos(0.523333)*1.0f, 0.0f,
+                                               (float) sin(0.785)*1.0f, (float)cos(0.785)*1.0f, 0.0f,  (float)sin(1.04667)*1.0f, (float)cos(1.04667)*1.0f, 0.0f,
+                                               (float)sin(1.30833)*1.0f, (float)cos(1.30833)*1.0f, 0.0f,  (float)sin(1.57)*1.0f, (float)cos(1.57)*1.0f, 0.0f,
+                                                (float)sin(1.83167)*1.0f, (float)cos(1.83167)*1.0f, 0.0f,(float) sin(2.09333)*1.0f, (float)cos(2.09333)*1.0f, 0.0f ,
+                                               (float)sin(2.355)*1.0f,(float) cos(2.355)*1.0f, 0.0f,(float)sin(2.61667)*1.0f, (float)cos(2.61667)*1.0f, 0.0f ,
+                                               (float)sin(2.87833)*1.0f,(float) cos(2.87833)*1.0f, 0.0f,(float)sin(3.14)*1.0f, (float)cos(3.14)*1.0f, 0.0f ,
+                                               (float)sin(3.40167)*1.0f, (float)cos(3.40167)*1.0f, 0.0f,(float)sin(3.66333)*1.0f, (float)cos(3.66333)*1.0f, 0.0f ,
+                                               (float)sin(3.925)*1.0f, (float)cos(3.925)*1.0f, 0.0f,(float)sin(4.18667)*1.0f, (float)cos(4.18667)*1.0f, 0.0f ,
+                                               (float)sin(4.44833)*1.0f, (float)cos(4.44833)*1.0f, 0.0f,(float)sin(4.71)*1.0f, (float)cos(4.71)*1.0f, 0.0f ,
+                                               (float)sin(4.97167)*1.0f,(float) cos(4.97167)*1.0f, 0.0f,(float)sin(5.23333)*1.0f, (float)cos(5.23333)*1.0f, 0.0f ,
+                                               (float)sin(5.495)*1.0f, (float)cos(5.495)*1.0f, 0.0f,(float)sin(5.75667)*1.0f,(float) cos(5.75667)*1.0f, 0.0f ,
+                                               (float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f,(float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f
+                                               ,(float)sin(6.28)*1.0f, (float)cos(6.28)*1.0f, 0.0f
+
+
+        };
+
+
+
+    vaoCono.create();
+    vaoCono.bind();
+    vboCono1.create();
+    vboCono1.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vboCono1.bind();
+    vboCono1.allocate(cono,sizeof(cono));
+    m_program->enableAttributeArray("position");
+    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+
+
+    vaoCono.release();
+    /*
+    vaoCono.create();
+    vaoCono.bind();
+    vboCono1.create();
+    vboCono1.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vboCono1.bind();
+    vboCono1.allocate(conePositions,sizeof(conePositions));
+    m_program->enableAttributeArray("position");
+    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);*/
+
+
+    vaoCono.release();
+
+
+    /*
+    vaoCono1.create();
+    vaoCono1.bind();
+    vboCono2.create();
+    vboCono2.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vboCono2.bind();
+    vboCono2.allocate(circlePositions,sizeof(circlePositions));
+    m_program->enableAttributeArray("position");
+    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+    vaoCono1.release();
+    */
+
+
+
+}
 void WidgetOpenGL::drawCylinder(){
     int i = 0;
     for (i = 0; i <= 360; i += 15){
@@ -320,6 +426,7 @@ void WidgetOpenGL::initializeGL()
     vao1.release();
 
     drawSphere();
+    drawCono();
     //drawCylinder();
     //Para pasar color a shader
     m_program->setAttributeValue("color",QVector3D(0,1,0));
@@ -368,9 +475,15 @@ void WidgetOpenGL::paintGL()
 
     }
     if(f3){
-        vao2.bind();
+
+        vaoCono.bind();
         m_program->setAttributeValue("color",QVector3D(1,0,0));
-        glDrawArrays(GL_TRIANGLES, 0, 18);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 50);
+        glDrawArrays(GL_TRIANGLE_FAN, 51, 77);
+        /*
+        vaoCono1.bind();
+        m_program->setAttributeValue("color",QVector3D(1,0,0));
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 27); */
     }
     if(f4){
         /*
@@ -380,6 +493,12 @@ void WidgetOpenGL::paintGL()
 
     }
     if(f5){
+
+
+        vao2.bind();
+        m_program->setAttributeValue("color",QVector3D(1,0,0));
+        glDrawArrays(GL_TRIANGLES, 0, 18);
+
 
     }
 
