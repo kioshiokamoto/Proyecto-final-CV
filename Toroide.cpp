@@ -1,106 +1,145 @@
-#include <cmath>
-#include <vector>
+#include "toroide.h"
 #include <iostream>
-#include <QVector4D>
 #include <QVector3D>
-#include <QVector2D>
-#include <QMatrix4x4>
-#include "Torus.h"
-#include <QMainWindow>
-#include <QOpenGLWindow>
-#include <qopenglwidget.h>
-#include <QSurfaceFormat>
-#include <QOpenGLFunctions>
-#include <QGLFunctions>
-#include <QtOpenGL>
 using namespace std;
-
-Torus::Torus() {
-    prec = 48;
-    inner = 0.5f;
-    outer = 0.2f;
-    init();
+toroide::toroide(int segx, int segy)
+{
+    init(segx,segy);
 }
 
-Torus::Torus(float in, float out, int precIn) {
-    prec = precIn;
-    inner = in;
-    outer = out;
-    init();
+toroide::toroide()
+{
+    init(3,3);
 }
+float toroide::toRadians(float degrees) { return (degrees * 2.0f * 3.14159f) / 360.0f; }
+void toroide::init(int segx, int segy)
+{
+    numVertices = segx * segy;
+    numIndices = 6*segx * segy;
+    for (int i = 0; i < numVertices; i++) { vertices.push_back(QVector3D()); } // std::vector::push_back()
+    for (int i = 0; i < numVertices; i++) { normals.push_back(QVector3D()); } // the end of a vector and
+    for (int i = 0; i < numVertices+segx; i++) { sTangents.push_back(QVector3D()); }
+    for (int i = 0; i < numVertices+segx; i++) { tTangents.push_back(QVector3D()); }
+    for (int i = 0; i < numIndices; i++) { indices.push_back(0); } // increases the vector size by 1
+    float alpha=0 , beta =0;
+    float rad1 = 0.9, rad2=0.4;
+    int cont =0;
+    int m=0, n=0,s=2;
+    /*for(m=0; m<segx; m++){
+        float amt = toRadians(m*360.0f / segx);
+        matriz1 = QTransform();
+        matriz1.rotate(amt,0.0f,0.0f,1.0f);
+        tTangents[m] = QVector3D(matriz1 * QVector4D(0.0f, -1.0f, 0.0f, 1.0f));
+        sTangents[m] = QVector3D(QVector3D(0.0f, 0.0f, -1.0f));
+        normals[m] = QVector3D::crossProduct(tTangents[m], sTangents[m]);
+    }*/
+    //vertices
+    int auxNormal=m;
+    while(cont< numVertices){
+        for(int i=cont;i<cont+segx; i++ ){
+            float x = (float)((rad1+rad2*cos(alpha))*cos(beta));
+            float y = (float)((rad1+rad2*cos(alpha))*sin(beta));
+            float z = (float)(rad2*sin(alpha));
+            alpha = alpha + 2*(M_PI)/segx;
+            vertices[i] = QVector3D(x, y, z);
+            /*if(i>0){
+                normals[i] = QVector3D::normal(vertices[i-1],vertices[i]);
+            }*/
+            normals[i]=QVector3D(x, y, z);
 
-float Torus::toRadians(float degrees) { return (degrees * 2.0f * 3.14159f) / 360.0f; }
+            /*
+            float amt = toRadians(s*360.0f / segy);
+            if(n==auxNormal-1){
+                n=0;
+            }
+            // rotate the tangent and bitangent vectors around the Y axis
+            matriz1 = QTransform();
+            matriz1.rotate(amt,0.0f,1.0f,0.0f);
+            sTangents[m] = QVector3D(matriz1 * QVector4D(sTangents[n], 1.0f));
+            matriz1.rotate(amt, QVector3D(0.0f, 1.0f, 0.0f));
+            tTangents[m] = QVector3D(matriz1 *QVector4D(tTangents[n], 1.0f));
+             // rotate the normal vector around the Y axis
+            matriz1.rotate(amt, QVector3D(0.0f, 1.0f, 0.0f));
+            normals[m] = QVector3D(matriz1 * QVector4D(normals[n], 1.0f));
+            m++;
+            n++;*/
 
-void Torus::init() {
-    numVertices = (prec + 1) * (prec + 1);
-    numIndices = prec * prec * 6;
-    for (int i = 0; i < numVertices; i++) { vertices.push_back(QVector3D()); }
-    for (int i = 0; i < numVertices; i++) { texCoords.push_back(QVector2D()); }
-    for (int i = 0; i < numVertices; i++) { normals.push_back(QVector3D()); }
-    for (int i = 0; i < numVertices; i++) { sTangents.push_back(QVector3D()); }
-    for (int i = 0; i < numVertices; i++) { tTangents.push_back(QVector3D()); }
-    for (int i = 0; i < numIndices; i++) { indices.push_back(0); }
-
-    // calculate first ring
-    for (int i = 0; i < prec + 1; i++) {
-        float amt = toRadians(i*360.0f / prec);
-
-        QMatrix4x4 rMat;
-        rMat = QTransform();
-        rMat.rotate(amt, QVector3D(0.0f, 0.0f, 1.0f));
-        QVector3D initPos(rMat * QVector4D(outer, 0.0f, 0.0f, 1.0f));
-
-        vertices[i] = QVector3D(initPos + QVector3D(inner, 0.0f, 0.0f));
-        texCoords[i] = QVector2D(0.0f, ((float)i / (float)prec));
-
-        rMat.rotate(amt, QVector3D(0.0f, 0.0f, 1.0f));
-        tTangents[i] = QVector3D(rMat * QVector4D(0.0f, -1.0f, 0.0f, 1.0f));
-
-        sTangents[i] = QVector3D(QVector3D(0.0f, 0.0f, -1.0f));
-        normals[i] = tTangents[i].operator*=(sTangents[i]);
-    }
-    // rotate the first ring about Y to get the other rings
-    for (int ring = 1; ring < prec + 1; ring++) {
-        for (int i = 0; i < prec + 1; i++) {
-            float amt = (float)toRadians((float)ring * 360.0f / (prec));
-
-            QMatrix4x4 rMat;
-            rMat = QTransform();
-
-            rMat.rotate(amt, QVector3D(0.0f, 1.0f, 0.0f));
-            vertices[ring*(prec + 1) + i] = QVector3D(rMat * QVector4D(vertices[i], 1.0f));
-
-            texCoords[ring*(prec + 1) + i] = QVector2D((float)ring*2.0f / (float)prec, texCoords[i].y());
-            if (texCoords[ring*(prec + 1) + i].x() > 1.0) {
-                texCoords[ring*(prec+1)+i].operator-=(QVector2D(-1.0,0));
-             }
-            rMat.rotate(amt, QVector3D(0.0f, 1.0f, 0.0f));
-            sTangents[ring*(prec + 1) + i] = QVector3D(rMat * QVector4D(sTangents[i], 1.0f));
-
-            rMat.rotate(amt, QVector3D(0.0f, 1.0f, 0.0f));
-            tTangents[ring*(prec + 1) + i] = QVector3D(rMat * QVector4D(tTangents[i], 1.0f));
-
-            rMat.rotate(amt, QVector3D(0.0f, 1.0f, 0.0f));
-            normals[ring*(prec + 1) + i] = QVector3D(rMat * QVector4D(normals[i], 1.0f));
         }
+        cont = cont+segx;
+        beta = beta + 2*(M_PI)/segy;
+        alpha = 0;
+        n=0;
+        s++;
     }
-    // calculate triangle indices
-    for (int ring = 0; ring < prec; ring++) {
-        for (int i = 0; i < prec; i++) {
-            indices[((ring*prec + i) * 2) * 3 + 0] = ring*(prec + 1) + i;
-            indices[((ring*prec + i) * 2) * 3 + 1] = (ring + 1)*(prec + 1) + i;
-            indices[((ring*prec + i) * 2) * 3 + 2] = ring*(prec + 1) + i + 1;
-            indices[((ring*prec + i) * 2 + 1) * 3 + 0] = ring*(prec + 1) + i + 1;
-            indices[((ring*prec + i) * 2 + 1) * 3 + 1] = (ring + 1)*(prec + 1) + i;
-            indices[((ring*prec + i) * 2 + 1) * 3 + 2] = (ring + 1)*(prec + 1) + i + 1;
+    cont = 0; //se han llenado cont indices
+    int j=segx; //indice de la siguiente base
+    int aux3= segx*segy-1-segx;
+    int aux = 0;
+    int aux1=0;
+    int cont1=0;
+    while(cont< numIndices){
+        segy--;
+        for(int i=aux; i<aux+segx; i++){
+            if(segy==0){
+                if(i==aux+segx-1){
+                    //cout<<aux<<endl;
+                    indices[6 *(i-aux)+cont] = i;
+                    indices[6 * (i-aux)+cont + 1] = 0;
+                    indices[6 * (i-aux)+cont + 2] = segx-1;
+                    indices[6 * (i-aux)+cont + 3] = i;
+                    indices[6 * (i-aux)+cont + 4] = 0;
+                    indices[6 * (i-aux)+cont + 5] = aux;
+                    cont1= cont1+6;
+                }else{
+                    //cout<<aux1<<endl;
+                    indices[6 *(i-aux)+cont] = i;
+                    indices[6 * (i-aux)+cont + 1] = aux1;
+                    indices[6 * (i-aux)+cont + 2] = aux1+1;
+                    indices[6 * (i-aux)+cont + 3] = i;
+                    indices[6 * (i-aux)+cont + 4] = aux1+1;
+                    indices[6 * (i-aux)+cont + 5] = i+1;
+                    cont1= cont1+6;
+                    aux1++;
+                }
+
+            }else{
+                if(j+1==aux+2*segx){
+                    //cout<<aux<<endl;
+                    indices[6 *(i-aux)+cont] = i;
+                    indices[6 * (i-aux)+cont + 1] = j;
+                    indices[6 * (i-aux)+cont + 2] = i+1;
+                    indices[6 * (i-aux)+cont + 3] = i;
+                    indices[6 * (i-aux)+cont + 4] = i+1;
+                    indices[6 * (i-aux)+cont + 5] = aux;
+                    j++;
+                    cont1 = cont1+6;
+                }else{
+                    indices[6 *(i-aux)+cont] = i;
+                    indices[6 * (i-aux)+cont + 1] = j;
+                    indices[6 * (i-aux)+cont + 2] = j+1;
+                    indices[6 * (i-aux)+cont + 3] = i;
+                    indices[6 * (i-aux)+cont + 4] = j + 1;
+                    indices[6 * (i-aux)+cont + 5] = i+1;
+                    j++;
+                    cont1 = cont1+6;
+                }
+
+            }
         }
+        aux = aux+segx;
+        cont = cont + cont1;
+        cont1=0;
     }
+    /*vector<int> ind = getIndices();
+    for(int m=0; m<numVertices;m++){
+       normals[m] = QVector3D::normal(vertices[ind[m]],vertices[ind[m+1]]);
+    }*/
+
+
 }
-int Torus::getNumVertices() { return numVertices; }
-int Torus::getNumIndices() { return numIndices; }
-std::vector<int> Torus::getIndices() { return indices; }
-std::vector<QVector3D> Torus::getVertices() { return vertices; }
-std::vector<QVector2D> Torus::getTexCoords() { return texCoords; }
-std::vector<QVector3D> Torus::getNormals() { return normals; }
-std::vector<QVector3D> Torus::getStangents() { return sTangents; }
-std::vector<QVector3D> Torus::getTtangents() { return tTangents; }
+int toroide::getNumVertices() { return numVertices; }
+int toroide::getNumIndices() { return numIndices; }
+std::vector<int> toroide::getIndices() { return indices; }
+std::vector<QVector3D> toroide::getVertices() { return vertices; }
+std::vector<QVector3D> toroide::getNormals() { return normals; }
+

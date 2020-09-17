@@ -91,6 +91,7 @@ void WidgetOpenGL::setScala(float scala)
 }
 
 void WidgetOpenGL::setupVertices() {
+    
     vboTorus[0].create();
     vboTorus[0].bind();
     vboTorus[0].setUsagePattern(QOpenGLBuffer::StaticDraw);

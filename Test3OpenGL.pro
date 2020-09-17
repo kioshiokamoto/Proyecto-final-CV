@@ -21,16 +21,15 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     widget_opengl.cpp \
-    torus.cpp \
-
+    toroide.cpp \
 
 
 
 HEADERS += \
-    Torus.h \
     colorcombo.h \
     mainwindow.h \
     widget_opengl.h \
+    toroide.h \
 
 FORMS += \
     mainwindow.ui

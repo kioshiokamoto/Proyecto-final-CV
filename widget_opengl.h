@@ -7,7 +7,7 @@
 #include <QOpenGLFunctions>
 #include <QGLFunctions>
 #include <QtOpenGL>
-#include "Torus.h"
+#include "toroide.h"
 #define PI 3.14159265f
 class WidgetOpenGL : public QOpenGLWidget
 {
@@ -24,7 +24,8 @@ public:
     int yRot;
     int zRot;
     float valorScala;
-    Torus myTorus;
+    toroide t1;
+
     QVector<GLfloat> m_points;
     QVector<GLfloat> m_points_Cylinder;
     int numTorusVertices;
