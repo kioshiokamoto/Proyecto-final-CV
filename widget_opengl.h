@@ -29,6 +29,9 @@ public:
     int numTorusVertices;
     int numTorusIndices;
 
+    int x,y;
+
+
 protected:
     virtual void initializeGL() override;
     virtual void resizeGL(int w, int h) override;
@@ -36,11 +39,12 @@ protected:
 private:
 
     QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaoTorus,vaoSphere,vaoCylinder,vaoCono,vaoCono1;
-    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[4], vboSphere,vboCylinder,vboCono1,vboCono2;
+    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[2], vboSphere,vboCylinder,vboCono1,vboCono2;
     QOpenGLShaderProgram *m_program;
+
     void drawAxis();
     void setupVertices();
-    void drawSphere();
+    void drawSphere(int x, int y);
     void drawCylinder();
     void drawCono();
 public slots:

@@ -18,9 +18,9 @@ WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{
     yRot = 0;
     zRot = 0;
     valorScala=1;
-    myTorus = Torus(0.5f, 0.2f, 48);
-    numTorusVertices = myTorus.getNumVertices();
-    numTorusIndices = myTorus.getNumIndices();
+    x = 5;
+    y = 5;
+
 
 }
 
@@ -83,47 +83,32 @@ void WidgetOpenGL::setScala(float scala)
 
     }
     qNormalizeScala(scala,&valorScala);
-
-
 }
 
 void WidgetOpenGL::setupVertices() {
-    std::vector<int> ind = myTorus.getIndices();
-    std::vector<QVector3D> vert = myTorus.getVertices();
-    std::vector<QVector2D> tex = myTorus.getTexCoords();
-    std::vector<QVector3D> norm = myTorus.getNormals();
+    myTorus.setupVertices(10,10);
 
-    std::vector<float> pvalues;
-    std::vector<float> tvalues;
-    std::vector<float> nvalues;
 
-    for (int i = 0; i < myTorus.getNumVertices(); i++) {
-        pvalues.push_back(vert[i].x());
-        pvalues.push_back(vert[i].y());
-        pvalues.push_back(vert[i].z());
-        tvalues.push_back(tex[i].x());
-        tvalues.push_back(tex[i].y());
-        nvalues.push_back(norm[i].x());
-        nvalues.push_back(norm[i].y());
-        nvalues.push_back(norm[i].z());
-    }
+
+    vboTorus[0].create();
+    vboTorus[0].bind();
+    vboTorus[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vboTorus[0].allocate(myTorus.vertex.constData(), myTorus.vertex.size() * sizeof(GLfloat));
+    vboTorus[0].release();
+
+    vboTorus[1].create();
+    vboTorus[1].bind();
+    vboTorus[1].setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vboTorus[1].allocate(myTorus.index.constData(), myTorus.index.size() * sizeof(GLfloat));
+    vboTorus[1].release();
+
+
     vaoTorus.create();
     vaoTorus.bind();
-    vboTorus->create();
-    vboTorus[0].setUsagePattern(QOpenGLBuffer::StaticDraw); //Modificar
-    vboTorus[0].bind();
-    vboTorus[0].allocate(pvalues.data(),sizeof(pvalues));
-    vboTorus[1].setUsagePattern(QOpenGLBuffer::StaticDraw); //Modificar
-    vboTorus[1].bind();
-    vboTorus[1].allocate(tvalues.data(),sizeof(tvalues));
-    vboTorus[2].setUsagePattern(QOpenGLBuffer::StaticDraw); //Modificar
-    vboTorus[2].bind();
-    vboTorus[2].allocate(nvalues.data(),sizeof(nvalues));
-    vboTorus[3].setUsagePattern(QOpenGLBuffer::StaticDraw); //Modificar
-    vboTorus[3].bind();
-    vboTorus[3].allocate(ind.data(),sizeof(ind));
 
 
+
+    vaoTorus.release();
 
 }
 void WidgetOpenGL::drawCono(){
@@ -210,10 +195,13 @@ void WidgetOpenGL::drawCylinder(){
     vaoCylinder.release();
 
 }
-void WidgetOpenGL::drawSphere(){
+void WidgetOpenGL::drawSphere(int x, int y){
+    vaoSphere.destroy();
+    vboSphere.destroy();
+    m_points.clear();
 
     float r=1.0;
-    int angleSpan = 10;
+    int angleSpan = 30 - x - y;
     for(int vAngle = -90; vAngle < 90; vAngle = vAngle + angleSpan){
         for(int hAngle = 0; hAngle <= 360; hAngle = hAngle + angleSpan){
             float x0 = r * qCos(vAngle * PI / 180) * qCos(hAngle * PI / 180);
@@ -384,7 +372,7 @@ void WidgetOpenGL::initializeGL()
 
     vao1.release();
 
-    drawSphere();
+
     drawCono();
     //drawCylinder();
     //Para pasar color a shader
@@ -421,16 +409,29 @@ void WidgetOpenGL::paintGL()
     m_program->setUniformValue("mv_matrix",base);
     drawAxis();
     if (f1){
+
         vao1.bind();
         m_program->setAttributeValue("color",QVector3D(0,1,0));
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        /*
+
+        m_program->setAttributeValue("color",QVector3D(1,1,0));
+        glDrawArrays(GL_LINES, 0, 36); */
+
+
 
 
     }
     if (f2){
+
+        drawSphere(x,y);
         vaoSphere.bind();
         m_program->setAttributeValue("color",QVector3D(1,0,0));
         glDrawArrays(GL_TRIANGLES,0,m_points.count()/3);
+
+
+        m_program->setAttributeValue("color",QVector3D(1,1,0));
+        glDrawArrays(GL_LINES,0,m_points.count()/3);
 
     }
     if(f3){
@@ -440,8 +441,9 @@ void WidgetOpenGL::paintGL()
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 50);
 
         vaoCono1.bind();
-        m_program->setAttributeValue("color",QVector3D(0,1,0));
+        m_program->setAttributeValue("color",QVector3D(1,0,0));
         glDrawArrays(GL_TRIANGLE_FAN, 0, 27);
+
     }
     if(f4){
 

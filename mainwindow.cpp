@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->zLabel->setText("0");
     ui->scala->setText("1.00");
 
-    color = ui->comboBox->currentColor().name();
+    //color = ui->comboBox->currentColor().name();
     //modificar
 
 }
@@ -147,3 +147,15 @@ void MainWindow::on_scalaSlider_valueChanged(int value)
 
 
 
+
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    wogl->x=value;
+    wogl->update();
+}
+
+void MainWindow::on_horizontalSlider_2_valueChanged(int value)
+{
+    wogl->y=value;
+    wogl->update();
+}
