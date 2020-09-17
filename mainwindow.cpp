@@ -159,3 +159,15 @@ void MainWindow::on_horizontalSlider_2_valueChanged(int value)
     wogl->y=value;
     wogl->update();
 }
+
+void MainWindow::on_checkBox_toggled(bool checked)
+{
+    wogl->smooth= checked;
+    wogl->update();
+}
+
+void MainWindow::on_checkBox_2_toggled(bool checked)
+{
+    wogl->wire= checked;
+    wogl->update();
+}

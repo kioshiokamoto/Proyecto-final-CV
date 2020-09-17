@@ -21,6 +21,9 @@ WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{
     x = 5;
     y = 5;
 
+    smooth = false;
+    wire = false;
+
 
 }
 
@@ -380,7 +383,6 @@ void WidgetOpenGL::initializeGL()
     //Pasar escalamiento y rotacion a shader
     m_program->setUniformValue("mv_matrix",base);
 
-
     m_program->release();
 }
 
@@ -408,57 +410,112 @@ void WidgetOpenGL::paintGL()
     m_program->bind();
     m_program->setUniformValue("mv_matrix",base);
     drawAxis();
-    if (f1){
 
-        vao1.bind();
-        m_program->setAttributeValue("color",QVector3D(0,1,0));
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        /*
+    if(smooth){
+        if (f1){
 
-        m_program->setAttributeValue("color",QVector3D(1,1,0));
-        glDrawArrays(GL_LINES, 0, 36); */
+            vao1.bind();
+            m_program->setAttributeValue("color",QVector3D(0,1,0));
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            /*
+
+            m_program->setAttributeValue("color",QVector3D(1,1,0));
+            glDrawArrays(GL_LINES, 0, 36); */
 
 
 
 
+        }
+        if (f2){
+
+            drawSphere(x,y);
+            vaoSphere.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_TRIANGLES,0,m_points.count()/3);
+
+
+
+
+        }
+        if(f3){
+
+            vaoCono.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 50);
+
+            vaoCono1.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 27);
+
+        }
+        if(f4){
+
+            vaoCylinder.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_QUAD_STRIP,0,m_points.count()/3);
+
+        }
+        if(f5){
+            vao2.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_TRIANGLES, 0, 18);
+
+
+        }
     }
-    if (f2){
+    if(wire){
+        if (f1){
 
-        drawSphere(x,y);
-        vaoSphere.bind();
-        m_program->setAttributeValue("color",QVector3D(1,0,0));
-        glDrawArrays(GL_TRIANGLES,0,m_points.count()/3);
+            vao1.bind();
+            m_program->setAttributeValue("color",QVector3D(0,1,0));
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            /*
+
+            m_program->setAttributeValue("color",QVector3D(1,1,0));
+            glDrawArrays(GL_LINES, 0, 36); */
 
 
-        m_program->setAttributeValue("color",QVector3D(1,1,0));
-        glDrawArrays(GL_LINES,0,m_points.count()/3);
 
+
+        }
+        if (f2){
+
+            drawSphere(x,y);
+            vaoSphere.bind();
+
+
+
+            m_program->setAttributeValue("color",QVector3D(1,1,0));
+            glDrawArrays(GL_LINES,0,m_points.count()/3);
+
+        }
+        if(f3){
+
+            vaoCono.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 50);
+
+            vaoCono1.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 27);
+
+        }
+        if(f4){
+
+            vaoCylinder.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_QUAD_STRIP,0,m_points.count()/3);
+
+        }
+        if(f5){
+            vao2.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_TRIANGLES, 0, 18);
+
+
+        }
     }
-    if(f3){
 
-        vaoCono.bind();
-        m_program->setAttributeValue("color",QVector3D(1,0,0));
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 50);
-
-        vaoCono1.bind();
-        m_program->setAttributeValue("color",QVector3D(1,0,0));
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 27);
-
-    }
-    if(f4){
-
-        vaoCylinder.bind();
-        m_program->setAttributeValue("color",QVector3D(1,0,0));
-        glDrawArrays(GL_QUAD_STRIP,0,m_points.count()/3);
-
-    }
-    if(f5){
-        vao2.bind();
-        m_program->setAttributeValue("color",QVector3D(1,0,0));
-        glDrawArrays(GL_TRIANGLES, 0, 18);
-
-
-    }
 
 }
 

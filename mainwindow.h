@@ -46,6 +46,10 @@ private slots:
 
     void on_horizontalSlider_2_valueChanged(int value);
 
+    void on_checkBox_toggled(bool checked);
+
+    void on_checkBox_2_toggled(bool checked);
+
 private:
     Ui::MainWindow *ui;
     WidgetOpenGL *wogl;
