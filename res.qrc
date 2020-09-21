@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>colors.json</file>
+        <file>Light_Fragment.glsl</file>
+        <file>Light_Vertex.glsl</file>
     </qresource>
 </RCC>

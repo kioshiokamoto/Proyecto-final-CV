@@ -25,14 +25,6 @@ void toroide::init(int segx, int segy)
     float rad1 = 0.9, rad2=0.4;
     int cont =0;
     int m=0, n=0,s=2;
-    /*for(m=0; m<segx; m++){
-        float amt = toRadians(m*360.0f / segx);
-        matriz1 = QTransform();
-        matriz1.rotate(amt,0.0f,0.0f,1.0f);
-        tTangents[m] = QVector3D(matriz1 * QVector4D(0.0f, -1.0f, 0.0f, 1.0f));
-        sTangents[m] = QVector3D(QVector3D(0.0f, 0.0f, -1.0f));
-        normals[m] = QVector3D::crossProduct(tTangents[m], sTangents[m]);
-    }*/
     //vertices
     int auxNormal=m;
     while(cont< numVertices){
@@ -42,28 +34,7 @@ void toroide::init(int segx, int segy)
             float z = (float)(rad2*sin(alpha));
             alpha = alpha + 2*(M_PI)/segx;
             vertices[i] = QVector3D(x, y, z);
-            /*if(i>0){
-                normals[i] = QVector3D::normal(vertices[i-1],vertices[i]);
-            }*/
             normals[i]=QVector3D(x, y, z);
-
-            /*
-            float amt = toRadians(s*360.0f / segy);
-            if(n==auxNormal-1){
-                n=0;
-            }
-            // rotate the tangent and bitangent vectors around the Y axis
-            matriz1 = QTransform();
-            matriz1.rotate(amt,0.0f,1.0f,0.0f);
-            sTangents[m] = QVector3D(matriz1 * QVector4D(sTangents[n], 1.0f));
-            matriz1.rotate(amt, QVector3D(0.0f, 1.0f, 0.0f));
-            tTangents[m] = QVector3D(matriz1 *QVector4D(tTangents[n], 1.0f));
-             // rotate the normal vector around the Y axis
-            matriz1.rotate(amt, QVector3D(0.0f, 1.0f, 0.0f));
-            normals[m] = QVector3D(matriz1 * QVector4D(normals[n], 1.0f));
-            m++;
-            n++;*/
-
         }
         cont = cont+segx;
         beta = beta + 2*(M_PI)/segy;
@@ -130,12 +101,6 @@ void toroide::init(int segx, int segy)
         cont = cont + cont1;
         cont1=0;
     }
-    /*vector<int> ind = getIndices();
-    for(int m=0; m<numVertices;m++){
-       normals[m] = QVector3D::normal(vertices[ind[m]],vertices[ind[m+1]]);
-    }*/
-
-
 }
 int toroide::getNumVertices() { return numVertices; }
 int toroide::getNumIndices() { return numIndices; }

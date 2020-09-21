@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <GL/glu.h>
 #include <stdio.h>
-
-
-
+#include "toroide.h"
+QMatrix4x4 pMat, vMat, mMat, mvMat, invTrMat, rMat;
+float i=0;
 
 WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{parent}
 {
@@ -91,6 +91,7 @@ void WidgetOpenGL::setScala(float scala)
 }
 
 void WidgetOpenGL::setupVertices() {
+    
     vboTorus[0].create();
     vboTorus[0].bind();
     vboTorus[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
@@ -149,7 +150,7 @@ void WidgetOpenGL::drawCono(){
 
 
 
-     vaoCono.create();
+    vaoCono.create();
     vaoCono.bind();
     vboCono1.create();
     vboCono1.setUsagePattern(QOpenGLBuffer::StaticDraw);
@@ -189,8 +190,8 @@ void WidgetOpenGL::drawCylinder(){
     vaoCylinder.bind();
     vboCylinder.create();
     vboCylinder.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    vbo.bind();
-    vbo.allocate(m_points_Cylinder.constData(),m_points_Cylinder.size() * sizeof (GLfloat));
+    vboCylinder.bind();
+    vboCylinder.allocate(m_points_Cylinder.constData(),m_points_Cylinder.size() * sizeof (GLfloat));
     m_program->enableAttributeArray("position");
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
     vaoCylinder.release();
@@ -200,7 +201,46 @@ void WidgetOpenGL::drawSphere(int x, int y){
     vaoSphere.destroy();
     vboSphere.destroy();
     m_points.clear();
-
+    luces->bind();
+    glDisable(GL_CULL_FACE);
+    QMatrix4x4 modelo= QTransform();
+    vMat.setToIdentity();
+    vMat.translate(QVector3D(4, -10, 500));
+    modelo.rotate(xRot,QVector3D(1.0f, 0.0f, 0.0f));
+    modelo.rotate(yRot,QVector3D(0.0f, 1.0f, 0.0f));
+    modelo.rotate(zRot,QVector3D(0.0f, 0.0f, 1.0f));
+    modelo.scale(valorScala);
+    QMatrix4x4 position;
+    position = QTransform();
+    position.translate(0,0,0);
+    position.rotate(.0,0.0f,0.0f,0.0f);
+    luces->setUniformValue("position", position);
+    luz->install_Lights();
+    if(i>23.0){
+        i=0;
+    }
+    luz->differentMaterial(int (i));
+    i+=0.05;
+    luz->light.position=QVector3D(luz->currentLightPos);
+    luces->setUniformValue("globalAmbient",luz->global_Ambient);
+    luces->setUniformValue("light.ambient", luz->light.Ambient);
+    luces->setUniformValue("light.diffuse", luz->light.Diffuse);
+    luces->setUniformValue("light.specular", luz->light.Specular);
+    luces->setUniformValue("light.position", luz->light.position);
+    luces->setUniformValue("material.ambient", luz->material.Ambient);
+    luces->setUniformValue("material.diffuse", luz->material.Diffuse);
+    luces->setUniformValue("material.specular", luz->material.Specular);
+    luces->setUniformValue("material.shininess", luz->material.shininess);
+    mvMat.setToIdentity();
+    mvMat = vMat * modelo;
+    invTrMat.setToIdentity();
+    invTrMat=mvMat.inverted().transposed();
+    //Estableciendo valor para la matriz vista y modelo
+    luces->setUniformValue("mv_matrix",mvMat);
+    //Estableciendo valores para la normal de la luz
+    luces->setUniformValue("norm_matrix",invTrMat);
+    //Estableciendo valor para la matriz de transformación del sólido
+    luces->setUniformValue("model", modelo);
     float r=1.0;
     int angleSpan = 30 - x - y;
     for(int vAngle = -90; vAngle < 90; vAngle = vAngle + angleSpan){
@@ -230,10 +270,16 @@ void WidgetOpenGL::drawSphere(int x, int y){
     vaoSphere.bind();
     vboSphere.create();
     vboSphere.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    vboSphere.bind();
-    vboSphere.allocate(m_points.constData(),m_points.size() * sizeof (GLfloat));
     m_program->enableAttributeArray("position");
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+    vbo1luz.bind();
+    vbo1luz.allocate(m_points.constData(),m_points.size() * sizeof (GLfloat));
+    luces->enableAttributeArray("vertPos");
+    luces->setAttributeBuffer("vertPos", GL_FLOAT, 0, 3);
+    vboluz.bind();
+    vboluz.allocate(m_points.constData(),m_points.size() * sizeof (GLfloat));
+    luces->enableAttributeArray("vertNormal");
+    luces->setAttributeBuffer("vertNormal", GL_FLOAT, 0, 3);
     vaoSphere.release();
 
 
@@ -241,11 +287,18 @@ void WidgetOpenGL::drawSphere(int x, int y){
 
 void WidgetOpenGL::initializeGL()
 {
+    luces = new QOpenGLShaderProgram();
+    luces->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Light_Vertex.glsl");
+    luces->addShaderFromSourceFile(QOpenGLShader::Fragment,":/Light_Fragment.glsl");
+    luces->link();
+    vaoluz.create();
+    vaoluz.bind();
+    vboluz.create();
+    vbo1luz.create();
+    vboluz.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbo1luz.setUsagePattern(QOpenGLBuffer::StaticDraw);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
     m_program = new QOpenGLShaderProgram();
     m_program->addShaderFromSourceCode(QOpenGLShader::Vertex,
                                        "#version 450\n" //GLSL version 1.4
@@ -382,6 +435,9 @@ void WidgetOpenGL::initializeGL()
     m_program->setUniformValue("mv_matrix",base);
 
     m_program->release();
+    vaoluz.release();
+    vboluz.release();
+    vbo1luz.release();
 }
 
 void WidgetOpenGL::resizeGL(int w, int h)
@@ -427,12 +483,15 @@ void WidgetOpenGL::paintGL()
         if (f2){
 
             drawSphere(x,y);
+            vaoluz.bind();
             vaoSphere.bind();
             m_program->setAttributeValue("color",QVector3D(1,0,0));
+            luces->bind();
+            vbo1luz.bind();
+            glEnable(GL_DEPTH_TEST);
+            glDepthFunc(GL_LEQUAL);
             glDrawArrays(GL_TRIANGLES,0,m_points.count()/3);
-
-
-
+            update();
 
         }
         if(f3){
@@ -475,12 +534,16 @@ void WidgetOpenGL::paintGL()
         if (f2){
 
             drawSphere(x,y);
-            vaoSphere.bind();
-
+            m_program->bind();
+            vaoluz.bind();
+            vbo1luz.bind();
+            m_program->enableAttributeArray("position");
+            m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
 
 
             m_program->setAttributeValue("color",QVector3D(1,1,0));
             glDrawArrays(GL_LINES,0,m_points.count()/3);
+            update();
 
         }
         if(f3){
@@ -498,10 +561,9 @@ void WidgetOpenGL::paintGL()
 
         }
         if(f4){
-            /*
             vaoCylinder.bind();
             m_program->setAttributeValue("color",QVector3D(1,0,0));
-            glDrawArrays(GL_QUAD_STRIP,0,m_points.count()/3); */
+            glDrawArrays(GL_QUAD_STRIP,0,m_points.count()/3);
 
         }
         if(f5){

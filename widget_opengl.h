@@ -7,6 +7,7 @@
 #include <QOpenGLFunctions>
 #include <QGLFunctions>
 #include <QtOpenGL>
+#include "Iluminacion.h"
 #include "toroide.h"
 #define PI 3.14159265f
 class WidgetOpenGL : public QOpenGLWidget
@@ -32,6 +33,10 @@ public:
     int numTorusIndices;
 
     int x,y;
+    lighting *luz = new lighting();
+    QOpenGLBuffer vboluz{QOpenGLBuffer::VertexBuffer};
+    QOpenGLBuffer vbo1luz{QOpenGLBuffer::VertexBuffer};
+    QOpenGLVertexArrayObject vaoluz;
 
 
 protected:
@@ -43,6 +48,7 @@ private:
     QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaoTorus,vaoSphere,vaoCylinder,vaoCono,vaoCono1;
     QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[2], vboSphere,vboCylinder,vboCono1,vboCono2;
     QOpenGLShaderProgram *m_program;
+    QOpenGLShaderProgram *luces;
 
     void drawAxis();
     void setupVertices();
