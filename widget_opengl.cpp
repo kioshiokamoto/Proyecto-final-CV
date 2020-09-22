@@ -276,19 +276,13 @@ void WidgetOpenGL::drawgeneral(vector<int> indices,vector<QVector3D> vertices,ve
          nvalues.push_back((normal[indices[i]]).z());
   }
 
-    vaogeneral.create();
     vaogeneral.bind();
     vbogeneral.bind();
     vbogeneral.allocate(&pvalues[0],pvalues.size()*4);
-    vbogeneral.create();
-    vbogeneral.bind();
+    vbogeneral1.bind();
     vbogeneral1.allocate(&nvalues[0],nvalues.size()*4);
-    vbogeneral1.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    vbogeneral2.create();
     vbogeneral2.bind();
     vbogeneral2.allocate(&indices[0],indices.size()*4);
-    vbogeneral2.setUsagePattern(QOpenGLBuffer::StaticDraw);
-
     for (int i = 0; i <numberVer; i++) {
               normales.push_back(normal[i].x());
               normales.push_back(normal[i].y());
@@ -299,10 +293,9 @@ void WidgetOpenGL::drawgeneral(vector<int> indices,vector<QVector3D> vertices,ve
          }
     vbogeneral3.bind();
     vbogeneral3.allocate(&normales[0],normales.size()*4);
-    vbogeneral3.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbogeneral.bind();
     m_program->enableAttributeArray("position");
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
-    vaogeneral.release();
 }
 
 void WidgetOpenGL::initializeGL()
@@ -549,7 +542,6 @@ void WidgetOpenGL::paintGL()
             numgeneralInd= cylinder.getNumIndices();
             int numberVer = cylinder.getNumVertices();
             drawgeneral(indices,vertices,normal,numberVer);
-            vaogeneral.bind();
             m_program->setAttributeValue("color",QVector3D(0,0,1));
             glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
 
@@ -562,7 +554,6 @@ void WidgetOpenGL::paintGL()
             numgeneralInd= torus.getNumIndices();
             int numberVer = torus.getNumVertices();
             drawgeneral(indices,vertices,normal,numberVer);
-            vaogeneral.bind();
             m_program->setAttributeValue("color",QVector3D(0,0,1));
             glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
         }
