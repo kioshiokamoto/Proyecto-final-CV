@@ -90,29 +90,6 @@ void WidgetOpenGL::setScala(float scala)
     qNormalizeScala(scala,&valorScala);
 }
 
-void WidgetOpenGL::setupVertices() {
-    
-    vboTorus[0].create();
-    vboTorus[0].bind();
-    vboTorus[0].setUsagePattern(QOpenGLBuffer::StaticDraw);
-    //vboTorus[0].allocate(myTorus.vertex.constData(), myTorus.vertex.size() * sizeof(GLfloat));
-    vboTorus[0].release();
-
-    vboTorus[1].create();
-    vboTorus[1].bind();
-    vboTorus[1].setUsagePattern(QOpenGLBuffer::StaticDraw);
-    //vboTorus[1].allocate(myTorus.index.constData(), myTorus.index.size() * sizeof(GLfloat));
-    vboTorus[1].release();
-
-
-    vaoTorus.create();
-    vaoTorus.bind();
-
-
-
-    vaoTorus.release();
-
-}
 void WidgetOpenGL::drawCono(){
     float conePositions[150]={0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
                     0.0f,0.0f, 1.0f, (float)sin(0.261667)*1.0f, (float)cos(0.261667)*1.0f, 0.0f, 0.0f, 0.0f, 1.0f, (float)sin(0.523333)*1.0f,(float) cos(0.523333)*1.0f, 0.0f,
@@ -285,8 +262,63 @@ void WidgetOpenGL::drawSphere(int x, int y){
 
 }
 
+void WidgetOpenGL::drawgeneral(vector<int> indices,vector<QVector3D> vertices,vector<QVector3D> normal,int numberVer){
+    vector<float> pvalues;
+    vector<float> nvalues;
+    vector<float> normales;
+    for (int i = 0; i < numgeneralInd; i++) {
+         pvalues.push_back((vertices[indices[i]]).x());
+         pvalues.push_back((vertices[indices[i]]).y());
+         pvalues.push_back((vertices[indices[i]]).z());
+         nvalues.push_back((normal[indices[i]]).x());
+         nvalues.push_back((normal[indices[i]]).y());
+         nvalues.push_back((normal[indices[i]]).z());
+  }
+
+    vaogeneral.create();
+    vaogeneral.bind();
+    vbogeneral.bind();
+    vbogeneral.allocate(&pvalues[0],pvalues.size()*4);
+    vbogeneral.create();
+    vbogeneral.bind();
+    vbogeneral1.allocate(&nvalues[0],nvalues.size()*4);
+    vbogeneral1.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbogeneral2.create();
+    vbogeneral2.bind();
+    vbogeneral2.allocate(&indices[0],indices.size()*4);
+    vbogeneral2.setUsagePattern(QOpenGLBuffer::StaticDraw);
+
+    for (int i = 0; i <numberVer; i++) {
+              normales.push_back(normal[i].x());
+              normales.push_back(normal[i].y());
+              normales.push_back(normal[i].z());
+              normales.push_back(normal[i].x()+normal[i].x()*0.2);
+              normales.push_back(normal[i].y()+normal[i].y()*0.2);
+              normales.push_back(normal[i].z()+normal[i].z()*0.2);
+         }
+    vbogeneral3.bind();
+    vbogeneral3.allocate(&normales[0],normales.size()*4);
+    vbogeneral3.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    m_program->enableAttributeArray("position");
+    m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
+    vaogeneral.release();
+}
+
 void WidgetOpenGL::initializeGL()
 {
+    vbogeneral.create();
+    vbogeneral.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbogeneral.release();
+    vbogeneral1.create();
+    vbogeneral1.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbogeneral1.release();
+    vbogeneral2.create();
+    vbogeneral2.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbogeneral2.release();
+    vbogeneral3.create();
+    vbogeneral3.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbogeneral3.release();
+
     luces = new QOpenGLShaderProgram();
     luces->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Light_Vertex.glsl");
     luces->addShaderFromSourceFile(QOpenGLShader::Fragment,":/Light_Fragment.glsl");
@@ -438,6 +470,8 @@ void WidgetOpenGL::initializeGL()
     vaoluz.release();
     vboluz.release();
     vbo1luz.release();
+
+
 }
 
 void WidgetOpenGL::resizeGL(int w, int h)
@@ -513,11 +547,16 @@ void WidgetOpenGL::paintGL()
 
         }
         if(f5){
-            vao2.bind();
-            m_program->setAttributeValue("color",QVector3D(1,0,0));
-            glDrawArrays(GL_TRIANGLES, 0, 18);
-
-
+            toroide torus(100,100);
+            vector<int> indices = torus.getIndices();
+            vector<QVector3D> vertices = torus.getVertices();
+            vector<QVector3D> normal = torus.getNormals();
+            numgeneralInd= torus.getNumIndices();
+            int numberVer = torus.getNumVertices();
+            drawgeneral(indices,vertices,normal,numberVer);
+            vaogeneral.bind();
+            m_program->setAttributeValue("color",QVector3D(0,0,1));
+            glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
         }
     }
     if(wire){
@@ -567,9 +606,14 @@ void WidgetOpenGL::paintGL()
 
         }
         if(f5){
-            vao2.bind();
-            m_program->setAttributeValue("color",QVector3D(1,1,0));
-            glDrawArrays(GL_LINES, 0, 18);
+            /*drawTorus(x,y);
+            vaoTorus.bind();
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            glDrawArrays(GL_LINES,0,numTorusIndices);*/
+            m_program->setAttributeValue("color",QVector3D(1,0,0));
+            for(int i=0; i<numgeneralInd/3 ; i++){
+                glDrawArrays(GL_LINE_LOOP, i*3,3 );
+             }
 
 
         }

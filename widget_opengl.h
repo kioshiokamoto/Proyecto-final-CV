@@ -29,14 +29,18 @@ public:
 
     QVector<GLfloat> m_points;
     QVector<GLfloat> m_points_Cylinder;
-    int numTorusVertices;
-    int numTorusIndices;
+    int numgeneralInd;
 
     int x,y;
     lighting *luz = new lighting();
     QOpenGLBuffer vboluz{QOpenGLBuffer::VertexBuffer};
     QOpenGLBuffer vbo1luz{QOpenGLBuffer::VertexBuffer};
     QOpenGLVertexArrayObject vaoluz;
+    QOpenGLBuffer vbogeneral{QOpenGLBuffer::VertexBuffer};
+    QOpenGLBuffer vbogeneral1{QOpenGLBuffer::VertexBuffer};
+    QOpenGLBuffer vbogeneral2{QOpenGLBuffer::VertexBuffer};
+    QOpenGLBuffer vbogeneral3{QOpenGLBuffer::VertexBuffer};
+
 
 
 protected:
@@ -45,8 +49,8 @@ protected:
     virtual void paintGL() override;
 private:
 
-    QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaoTorus,vaoSphere,vaoCylinder,vaoCono,vaoCono1;
-    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo,vboTorus[2], vboSphere,vboCylinder,vboCono1,vboCono2;
+    QOpenGLVertexArrayObject vaoX,vaoY,vaoZ,vao1, vao2,vaogeneral,vaoSphere,vaoCylinder,vaoCono,vaoCono1;
+    QOpenGLBuffer vboX,vboY,vboZ,vbo, _vbo, vboSphere,vboCylinder,vboCono1,vboCono2;
     QOpenGLShaderProgram *m_program;
     QOpenGLShaderProgram *luces;
 
@@ -55,6 +59,8 @@ private:
     void drawSphere(int x, int y);
     void drawCylinder();
     void drawCono();
+    void drawgeneral(vector<int> indices,vector<QVector3D> vertices,
+                     vector<QVector3D> normal,int numberVer);
 public slots:
     void setXRotation(int angle);
     void setYRotation(int angle);

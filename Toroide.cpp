@@ -24,9 +24,8 @@ void toroide::init(int segx, int segy)
     float alpha=0 , beta =0;
     float rad1 = 0.9, rad2=0.4;
     int cont =0;
-    int m=0, n=0,s=2;
+    int n=0,s=2;
     //vertices
-    int auxNormal=m;
     while(cont< numVertices){
         for(int i=cont;i<cont+segx; i++ ){
             float x = (float)((rad1+rad2*cos(alpha))*cos(beta));
@@ -44,7 +43,6 @@ void toroide::init(int segx, int segy)
     }
     cont = 0; //se han llenado cont indices
     int j=segx; //indice de la siguiente base
-    int aux3= segx*segy-1-segx;
     int aux = 0;
     int aux1=0;
     int cont1=0;
