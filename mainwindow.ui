@@ -319,6 +319,9 @@
      <property name="sliderPosition">
       <number>50</number>
      </property>
+     <property name="tracking">
+      <bool>false</bool>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -340,6 +343,9 @@
      </property>
      <property name="sliderPosition">
       <number>50</number>
+     </property>
+     <property name="tracking">
+      <bool>false</bool>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>

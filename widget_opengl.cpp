@@ -504,6 +504,7 @@ void WidgetOpenGL::paintGL()
 
             m_program->setAttributeValue("color",QVector3D(1,1,0));
             glDrawArrays(GL_LINES, 0, 36); */
+            update();
 
 
 
@@ -532,6 +533,7 @@ void WidgetOpenGL::paintGL()
             vaoCono1.bind();
             m_program->setAttributeValue("color",QVector3D(1,0,0));
             glDrawArrays(GL_TRIANGLE_FAN, 0, 27);
+            update();
 
         }
         if(f4){
@@ -545,6 +547,7 @@ void WidgetOpenGL::paintGL()
             drawgeneral(indices,vertices,normal,numberVer);
             m_program->setAttributeValue("color",QVector3D(0,0,1));
             glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
+            update();
 
         }
         if(f5){
@@ -557,6 +560,7 @@ void WidgetOpenGL::paintGL()
             drawgeneral(indices,vertices,normal,numberVer);
             m_program->setAttributeValue("color",QVector3D(0,0,1));
             glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
+            update();
         }
     }
     if(wire){
@@ -589,14 +593,7 @@ void WidgetOpenGL::paintGL()
             vaoCono.bind();
             m_program->setAttributeValue("color",QVector3D(1,1,0));
             glDrawArrays(GL_LINES, 0, 50);
-            /*
-            vaoCono.bind();
-            m_program->setAttributeValue("color",QVector3D(1,0,0));
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 50);
 
-            vaoCono1.bind();
-            m_program->setAttributeValue("color",QVector3D(1,0,0));
-            glDrawArrays(GL_TRIANGLE_FAN, 0, 27); */
 
         }
         if(f4){
@@ -607,10 +604,7 @@ void WidgetOpenGL::paintGL()
 
         }
         if(f5){
-            /*drawTorus(x,y);
-            vaoTorus.bind();
-            m_program->setAttributeValue("color",QVector3D(1,0,0));
-            glDrawArrays(GL_LINES,0,numTorusIndices);*/
+
             m_program->setAttributeValue("color",QVector3D(1,0,0));
             for(int i=0; i<numgeneralInd/3 ; i++){
                 glDrawArrays(GL_LINE_LOOP, i*3,3 );
