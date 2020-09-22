@@ -36,10 +36,13 @@ WidgetOpenGL::~WidgetOpenGL()
 
 static void qNormalizeAngle(int &angle)
 {
-    while (angle < 0)
-        angle += 360 * 16;
-    while (angle > 360 * 16)
-        angle -= 360 * 16;
+   while (angle < 0){
+        angle += (360*2)/100;
+    }
+    while (angle > (360*2)/100){
+        
+        angle -= (360*2)/100;
+    }
 }
 
 
