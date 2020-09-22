@@ -26,8 +26,6 @@ WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{
     wire = false;
 
     t1 = toroide(5,5);
-
-
 }
 
 WidgetOpenGL::~WidgetOpenGL()
@@ -220,7 +218,7 @@ void WidgetOpenGL::drawSphere(int x, int y){
     //Estableciendo valor para la matriz de transformación del sólido
     luces->setUniformValue("model", modelo);
     float r=1.0;
-    int angleSpan = 30 - x - y;
+    int angleSpan = (250 - x - y)/10;
     for(int vAngle = -90; vAngle < 90; vAngle = vAngle + angleSpan){
         for(int hAngle = 0; hAngle <= 360; hAngle = hAngle + angleSpan){
             float x0 = r * qCos(vAngle * PI / 180) * qCos(hAngle * PI / 180);
@@ -535,7 +533,7 @@ void WidgetOpenGL::paintGL()
         }
         if(f4){
 
-            cilindro cylinder(100,100);
+            cilindro cylinder(x,y);
             vector<int> indices = cylinder.getIndices();
             vector<QVector3D> vertices = cylinder.getVertices();
             vector<QVector3D> normal = cylinder.getNormals();
@@ -547,7 +545,7 @@ void WidgetOpenGL::paintGL()
 
         }
         if(f5){
-            toroide torus(100,100);
+            toroide torus(x,y);
             vector<int> indices = torus.getIndices();
             vector<QVector3D> vertices = torus.getVertices();
             vector<QVector3D> normal = torus.getNormals();
