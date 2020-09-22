@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     Iluminacion.cpp \
+    cilindro.cpp \
     colorcombo.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -28,6 +29,7 @@ SOURCES += \
 
 HEADERS += \
     Iluminacion.h \
+    cilindro.h \
     colorcombo.h \
     mainwindow.h \
     widget_opengl.h \

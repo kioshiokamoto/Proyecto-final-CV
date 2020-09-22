@@ -4,6 +4,7 @@
 #include <GL/glu.h>
 #include <stdio.h>
 #include "toroide.h"
+#include "cilindro.h"
 QMatrix4x4 pMat, vMat, mMat, mvMat, invTrMat, rMat;
 float i=0;
 
@@ -541,9 +542,16 @@ void WidgetOpenGL::paintGL()
         }
         if(f4){
 
-            vaoCylinder.bind();
-            m_program->setAttributeValue("color",QVector3D(1,0,0));
-            glDrawArrays(GL_QUAD_STRIP,0,m_points.count()/3);
+            cilindro cylinder(100,100);
+            vector<int> indices = cylinder.getIndices();
+            vector<QVector3D> vertices = cylinder.getVertices();
+            vector<QVector3D> normal = cylinder.getNormals();
+            numgeneralInd= cylinder.getNumIndices();
+            int numberVer = cylinder.getNumVertices();
+            drawgeneral(indices,vertices,normal,numberVer);
+            vaogeneral.bind();
+            m_program->setAttributeValue("color",QVector3D(0,0,1));
+            glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
 
         }
         if(f5){
@@ -600,9 +608,10 @@ void WidgetOpenGL::paintGL()
 
         }
         if(f4){
-            vaoCylinder.bind();
             m_program->setAttributeValue("color",QVector3D(1,0,0));
-            glDrawArrays(GL_QUAD_STRIP,0,m_points.count()/3);
+            for(int i=0; i<numgeneralInd/3 ; i++){
+                glDrawArrays(GL_LINE_LOOP, i*3,3 );
+            }
 
         }
         if(f5){
