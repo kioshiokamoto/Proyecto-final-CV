@@ -39,6 +39,7 @@ static void qNormalizeAngle(int &angle, int &angleOld)
    int auxAntiguo = angle;
    if(aux < 0){    
       angle= angle-angleOld;
+   }
    if(aux > 0){
      angle= angle-angleOld;
    }
