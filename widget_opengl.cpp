@@ -7,6 +7,7 @@
 #include "cilindro.h"
 QMatrix4x4 pMat, vMat, mMat, mvMat, invTrMat, rMat;
 float i=0;
+int angleOld = 0;
 
 WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{parent}
 {
@@ -32,21 +33,22 @@ WidgetOpenGL::~WidgetOpenGL()
 {
 }
 
-static void qNormalizeAngle(int &angle)
+static void qNormalizeAngle(int &angle, int &angleOld)
 {
-   while (angle < 0){
-        angle += (360*2)/100;
-    }
-    while (angle > (360*2)/100){
-        
-        angle -= (360*2)/100;
-    }
+   int aux = angle-angleOld;
+   int auxAntiguo = angle;
+   if(aux < 0){    
+      angle= angle-angleOld;
+   if(aux > 0){
+     angle= angle-angleOld;
+   }
+   angleOld =auxAntiguo;
 }
 
 
 void WidgetOpenGL::setXRotation(int angle)
 {
-    qNormalizeAngle(angle);
+    qNormalizeAngle(angle,angleOld);
     if (angle != xRot) {
         xRot = angle;
         emit xRotationChanged(angle);
@@ -55,7 +57,7 @@ void WidgetOpenGL::setXRotation(int angle)
 }
 void WidgetOpenGL::setYRotation(int angle)
 {
-    qNormalizeAngle(angle);
+    qNormalizeAngle(angle,angleOld);
     if (angle != yRot) {
         yRot = angle;
         emit yRotationChanged(angle);
@@ -64,7 +66,7 @@ void WidgetOpenGL::setYRotation(int angle)
 }
 void WidgetOpenGL::setZRotation(int angle)
 {
-    qNormalizeAngle(angle);
+    qNormalizeAngle(angle,angleOld);
     if (angle != zRot) {
         zRot = angle;
         emit zRotationChanged(angle);
