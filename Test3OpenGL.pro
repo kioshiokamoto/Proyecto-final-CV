@@ -24,6 +24,7 @@ SOURCES += \
     mainwindow.cpp \
     widget_opengl.cpp \
     toroide.cpp \
+    cono.cpp \
 
 
 
@@ -34,6 +35,7 @@ HEADERS += \
     mainwindow.h \
     widget_opengl.h \
     toroide.h \
+    cono.h \
 
 FORMS += \
     mainwindow.ui

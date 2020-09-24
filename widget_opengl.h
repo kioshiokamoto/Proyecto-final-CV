@@ -9,6 +9,7 @@
 #include <QtOpenGL>
 #include "Iluminacion.h"
 #include "toroide.h"
+#include "cono.h"
 #define PI 3.14159265f
 class WidgetOpenGL : public QOpenGLWidget
 {
