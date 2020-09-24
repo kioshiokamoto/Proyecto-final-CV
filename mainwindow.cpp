@@ -104,8 +104,6 @@ void MainWindow::on_XSlider_valueChanged(int value)
 
     wogl->setXRotation(value);
     wogl->base.rotate(wogl->xRot,1.0f,0.0f,0.0f);
-    wogl->base.rotate(wogl->yRot,0.0f,1.0f,0.0f);
-    wogl->base.rotate(wogl->zRot,0.0f,0.0f,1.0f);
     wogl->update();
 }
 
@@ -115,9 +113,7 @@ void MainWindow::on_YSlider_valueChanged(int value)
     ui->yLabel->setText(texto1);
 
     wogl->setYRotation(value);
-    wogl->base.rotate(wogl->xRot,1.0f,0.0f,0.0f);
     wogl->base.rotate(wogl->yRot,0.0f,1.0f,0.0f);
-    wogl->base.rotate(wogl->zRot,0.0f,0.0f,1.0f);
     wogl->update();
 }
 
@@ -127,8 +123,6 @@ void MainWindow::on_ZSlider_valueChanged(int value)
     ui->zLabel->setText(texto2);
 
     wogl->setZRotation(value);
-    wogl->base.rotate(wogl->xRot,1.0f,0.0f,0.0f);
-    wogl->base.rotate(wogl->yRot,0.0f,1.0f,0.0f);
     wogl->base.rotate(wogl->zRot,0.0f,0.0f,1.0f);
     wogl->update();
 }
