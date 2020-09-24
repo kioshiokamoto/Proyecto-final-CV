@@ -481,7 +481,7 @@ void WidgetOpenGL::paintGL()
                         numgeneralInd= cone.getNumIndices();
                         int numberVer = cone.getNumVertices();
                         drawgeneral(indices,vertices,normal,numberVer);
-                        m_program->setAttributeValue("color",QVector3D(0,0,1));
+                        m_program->setAttributeValue("color",QVector3D(1,0,1));
                         glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
                         update();
 
@@ -496,7 +496,7 @@ void WidgetOpenGL::paintGL()
 
             drawgeneral(indices,vertices,normal,numberVer);
 
-            m_program->setAttributeValue("color",QVector3D(0,1,0));
+            m_program->setAttributeValue("color",QVector3D(0,1,1));
 
             glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
             update();

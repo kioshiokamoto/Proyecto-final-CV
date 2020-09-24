@@ -146,7 +146,7 @@
      <item>
       <widget class="QGroupBox" name="groupBox_3">
        <property name="title">
-        <string>Rotar X</string>
+        <string>Rotar Y</string>
        </property>
        <widget class="QSlider" name="YSlider">
         <property name="geometry">
@@ -424,7 +424,7 @@
      <x>0</x>
      <y>0</y>
      <width>1091</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuArchivo">

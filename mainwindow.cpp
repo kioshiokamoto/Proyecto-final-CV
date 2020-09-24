@@ -76,7 +76,7 @@ void MainWindow::on_radioButton_6_clicked()
     if (wogl->f1) wogl->f1 = false;
     if (wogl->f2) wogl->f2 = false;
     if (wogl->f3) wogl->f3 = false;
-    if (wogl->f4) wogl->f5 = false;
+    if (wogl->f4) wogl->f4 = false;
     wogl->f5 = true;
     wogl->update();
 }
