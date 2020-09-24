@@ -11,23 +11,29 @@ toroide::toroide()
 {
     init(3,3);
 }
-float toroide::toRadians(float degrees) { return (degrees * 2.0f * 3.14159f) / 360.0f; }
+float toroide::toRadians(float degrees) 
+{ 
+    return (degrees * 2.0f * 3.14159f) / 360.0f; 
+}
+
 void toroide::init(int segx, int segy)
 {
     numVertices = segx * segy;
     numIndices = 6*segx * segy;
-    for (int i = 0; i < numVertices; i++) { vertices.push_back(QVector3D()); } // std::vector::push_back()
-    for (int i = 0; i < numVertices; i++) { normals.push_back(QVector3D()); } // the end of a vector and
+    for (int i = 0; i < numVertices; i++) { vertices.push_back(QVector3D()); } 
+    for (int i = 0; i < numVertices; i++) { normals.push_back(QVector3D()); } 
     for (int i = 0; i < numVertices+segx; i++) { sTangents.push_back(QVector3D()); }
     for (int i = 0; i < numVertices+segx; i++) { tTangents.push_back(QVector3D()); }
-    for (int i = 0; i < numIndices; i++) { indices.push_back(0); } // increases the vector size by 1
+    for (int i = 0; i < numIndices; i++) { indices.push_back(0); } 
     float alpha=0 , beta =0;
     float rad1 = 0.9, rad2=0.4;
     int cont =0;
     int n=0,s=2;
-    //vertices
-    while(cont< numVertices){
-        for(int i=cont;i<cont+segx; i++ ){
+    
+    while(cont< numVertices)
+    {
+        for(int i=cont;i<cont+segx; i++ )
+        {
             float x = (float)((rad1+rad2*cos(alpha))*cos(beta));
             float y = (float)((rad1+rad2*cos(alpha))*sin(beta));
             float z = (float)(rad2*sin(alpha));
@@ -41,17 +47,21 @@ void toroide::init(int segx, int segy)
         n=0;
         s++;
     }
-    cont = 0; //se han llenado cont indices
-    int j=segx; //indice de la siguiente base
+    cont = 0; 
+    int j=segx; 
     int aux = 0;
     int aux1=0;
     int cont1=0;
-    while(cont< numIndices){
+    while(cont< numIndices)
+    {
         segy--;
-        for(int i=aux; i<aux+segx; i++){
-            if(segy==0){
-                if(i==aux+segx-1){
-                    //cout<<aux<<endl;
+        for(int i=aux; i<aux+segx; i++)
+        {
+            if(segy==0)
+            {
+                if(i==aux+segx-1)
+                {
+                    
                     indices[6 *(i-aux)+cont] = i;
                     indices[6 * (i-aux)+cont + 1] = 0;
                     indices[6 * (i-aux)+cont + 2] = segx-1;
@@ -59,8 +69,10 @@ void toroide::init(int segx, int segy)
                     indices[6 * (i-aux)+cont + 4] = 0;
                     indices[6 * (i-aux)+cont + 5] = aux;
                     cont1= cont1+6;
-                }else{
-                    //cout<<aux1<<endl;
+                }
+                else
+                {
+                    
                     indices[6 *(i-aux)+cont] = i;
                     indices[6 * (i-aux)+cont + 1] = aux1;
                     indices[6 * (i-aux)+cont + 2] = aux1+1;
@@ -70,10 +82,12 @@ void toroide::init(int segx, int segy)
                     cont1= cont1+6;
                     aux1++;
                 }
-
-            }else{
-                if(j+1==aux+2*segx){
-                    //cout<<aux<<endl;
+            }
+            else
+            {
+                if(j+1==aux+2*segx)
+                {
+                  
                     indices[6 *(i-aux)+cont] = i;
                     indices[6 * (i-aux)+cont + 1] = j;
                     indices[6 * (i-aux)+cont + 2] = i+1;
@@ -82,7 +96,9 @@ void toroide::init(int segx, int segy)
                     indices[6 * (i-aux)+cont + 5] = aux;
                     j++;
                     cont1 = cont1+6;
-                }else{
+                }
+                else
+                {
                     indices[6 *(i-aux)+cont] = i;
                     indices[6 * (i-aux)+cont + 1] = j;
                     indices[6 * (i-aux)+cont + 2] = j+1;
@@ -92,7 +108,6 @@ void toroide::init(int segx, int segy)
                     j++;
                     cont1 = cont1+6;
                 }
-
             }
         }
         aux = aux+segx;
@@ -100,6 +115,7 @@ void toroide::init(int segx, int segy)
         cont1=0;
     }
 }
+
 int toroide::getNumVertices() { return numVertices; }
 int toroide::getNumIndices() { return numIndices; }
 std::vector<int> toroide::getIndices() { return indices; }

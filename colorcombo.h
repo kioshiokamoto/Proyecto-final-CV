@@ -9,30 +9,28 @@ class QListWidget;
 class ColorCombo : public QLabel
 {
     Q_OBJECT
-public:
-    ColorCombo(QWidget *parent = nullptr);
-    void adjustSize(const QSize &sz);
-    void setCurrentColor(const QColor &color);
+    public:
+        ColorCombo(QWidget *parent = nullptr);
+        void adjustSize(const QSize &sz);
+        void setCurrentColor(const QColor &color);
 
-    QColor currentColor() const{
-        return mCurrentColor;
-    }
+        QColor currentColor() const{
+            return mCurrentColor;
+        }
+    signals:
+        void currentColorChanged(const QColor &color);
 
-
-signals:
-    void currentColorChanged(const QColor &color);
-
-protected:
-    void mousePressEvent(QMouseEvent *e) override;
-private:
-    QColor mCurrentColor;
-    QMenu *mMenu;
-    QMenu *makeMenu();
-    QListWidget *mListWidget;
-    QListWidget *makeListWidget();
-    void displayColor(const QColor &color);
-    void assignColors(QListWidget *listWidget);
+    protected:
+        void mousePressEvent(QMouseEvent *e) override;
+    private:
+        QColor mCurrentColor;
+        QMenu *mMenu;
+        QMenu *makeMenu();
+        QListWidget *mListWidget;
+        QListWidget *makeListWidget();
+        void displayColor(const QColor &color);
+        void assignColors(QListWidget *listWidget);
 
 };
 
-#endif // COLORCOMBO_H
+#endif 

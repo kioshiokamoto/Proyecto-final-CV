@@ -18,9 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->zLabel->setText("0");
     ui->scala->setText("1.00");
 
-    //color = ui->comboBox->currentColor().name();
-    //modificar
-
 }
 
 MainWindow::~MainWindow()
@@ -28,11 +25,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
 void MainWindow::on_radioButton_clicked()
 {
-    //std::cout<<color.toStdString();
+   
     if (wogl->f2) wogl->f2 = false;
     if (wogl->f3) wogl->f3 = false;
     if (wogl->f4) wogl->f4 = false;
@@ -62,6 +57,7 @@ void MainWindow::on_radioButton_4_clicked()
     wogl->f3 = true;
     wogl->update();
 }
+
 void MainWindow::on_radioButton_5_clicked()
 {
     if (wogl->f1) wogl->f1 = false;
@@ -71,6 +67,7 @@ void MainWindow::on_radioButton_5_clicked()
     wogl->f4 = true;
     wogl->update();
 }
+
 void MainWindow::on_radioButton_6_clicked()
 {
     if (wogl->f1) wogl->f1 = false;
@@ -80,7 +77,6 @@ void MainWindow::on_radioButton_6_clicked()
     wogl->f5 = true;
     wogl->update();
 }
-
 
 void MainWindow::on_radioButton_3_clicked()
 {
@@ -111,7 +107,6 @@ void MainWindow::on_YSlider_valueChanged(int value)
 {
     QString texto1 = QString::fromStdString(std::to_string(value));
     ui->yLabel->setText(texto1);
-
     wogl->setYRotation(value);
     wogl->base.rotate(wogl->yRot,0.0f,1.0f,0.0f);
     wogl->update();
@@ -121,12 +116,10 @@ void MainWindow::on_ZSlider_valueChanged(int value)
 {
     QString texto2 = QString::fromStdString(std::to_string(value));
     ui->zLabel->setText(texto2);
-
     wogl->setZRotation(value);
     wogl->base.rotate(wogl->zRot,0.0f,0.0f,1.0f);
     wogl->update();
 }
-
 
 void MainWindow::on_scalaSlider_valueChanged(int value)
 {
@@ -135,12 +128,6 @@ void MainWindow::on_scalaSlider_valueChanged(int value)
     wogl->setScala(value/100.0);
     wogl->update();
 }
-
-
-
-
-
-
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {

@@ -20,19 +20,23 @@ ColorCombo::ColorCombo(QWidget *parent)
     mMenu = makeMenu();
 
 }
+
 void ColorCombo::adjustSize(const QSize &sz)
 {
     setMinimumSize(sz);
     setMaximumSize(sz);
 }
+
 void ColorCombo::setCurrentColor(const QColor &color)
 {
-    if(mCurrentColor != color){
+    if(mCurrentColor != color)
+    {
         mCurrentColor = color;
         displayColor(mCurrentColor);
         emit currentColorChanged(mCurrentColor);
     }
 }
+
 void ColorCombo::mousePressEvent(QMouseEvent *e)
 {
     mListWidget->setMinimumWidth(width());
@@ -41,6 +45,7 @@ void ColorCombo::mousePressEvent(QMouseEvent *e)
 
 
 }
+
 QListWidget *ColorCombo::makeListWidget()
 {
     QListWidget *listWidget = new QListWidget(this);
@@ -53,6 +58,7 @@ QListWidget *ColorCombo::makeListWidget()
     });
     return listWidget;
 }
+
 QMenu *ColorCombo::makeMenu()
 {
     QMenu *menu = new QMenu(this);
@@ -63,6 +69,7 @@ QMenu *ColorCombo::makeMenu()
     menu->setLayout(vbox);
     return menu;
 }
+
 void ColorCombo::displayColor(const QColor &color)
 {
     QImage imgColor(size(),QImage::Format_ARGB32_Premultiplied);
@@ -70,21 +77,22 @@ void ColorCombo::displayColor(const QColor &color)
 
     painter.fillRect(rect(),color);
     setPixmap(QPixmap::fromImage(imgColor));
-    //std::cout<<"Color es -> "<< mCurrentColor.name().toStdString() <<std::endl ;
-
-
+   
 }
 void ColorCombo::assignColors(QListWidget *listWidget)
 {
     QFile JSFile(":/colors.json");
-    if(JSFile.open(QIODevice::ReadOnly | QIODevice::Text)){
+    if(JSFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
         QJsonDocument doc = QJsonDocument::fromJson(JSFile.readAll());
         JSFile.close();
         QJsonArray colorsArray = doc.array();
         const int nColors = colorsArray.size();
-        if(nColors>0){
+        if(nColors>0)
+        {
             listWidget->clear();
-            for(int iColor=0;iColor<nColors;++iColor){
+            for(int iColor=0;iColor<nColors;++iColor)
+            {
                 QJsonObject colorObj = colorsArray.at(iColor).toObject();
                 QListWidgetItem *colorItem = new QListWidgetItem;
                 colorItem->setText(colorObj["name"].toString());
@@ -92,7 +100,6 @@ void ColorCombo::assignColors(QListWidget *listWidget)
                 colorItem->setForeground(Qt::white);
                 listWidget->addItem(colorItem);
             }
-
         }
     }
 }

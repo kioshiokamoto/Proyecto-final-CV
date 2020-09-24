@@ -9,7 +9,7 @@ QMatrix4x4 pMat, vMat, mMat, mvMat, invTrMat, rMat;
 float i=0;
 int angleOld = 0;
 
-WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{parent}
+WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}
 {
     f1 = false;
     f2 = false;
@@ -31,16 +31,19 @@ WidgetOpenGL::WidgetOpenGL(QWidget *parent) : QOpenGLWidget {parent}//: QWidget{
 
 WidgetOpenGL::~WidgetOpenGL()
 {
+
 }
 
 static void qNormalizeAngle(int &angle, int &angleOld)
 {
    int aux = angle-angleOld;
    int auxAntiguo = angle;
-   if(aux < 0){    
+   if(aux < 0)
+   {    
       angle= angle-angleOld;
    }
-   if(aux > 0){
+   if(aux > 0)
+   {
      angle= angle-angleOld;
    }
    angleOld =auxAntiguo;
@@ -50,7 +53,8 @@ static void qNormalizeAngle(int &angle, int &angleOld)
 void WidgetOpenGL::setXRotation(int angle)
 {
     qNormalizeAngle(angle,angleOld);
-    if (angle != xRot) {
+    if (angle != xRot) 
+    {
         xRot = angle;
         emit xRotationChanged(angle);
         update();
@@ -59,78 +63,79 @@ void WidgetOpenGL::setXRotation(int angle)
 void WidgetOpenGL::setYRotation(int angle)
 {
     qNormalizeAngle(angle,angleOld);
-    if (angle != yRot) {
+    if (angle != yRot) 
+    {
         yRot = angle;
         emit yRotationChanged(angle);
         update();
     }
 }
+
 void WidgetOpenGL::setZRotation(int angle)
 {
     qNormalizeAngle(angle,angleOld);
-    if (angle != zRot) {
+    if (angle != zRot) 
+    {
         zRot = angle;
         emit zRotationChanged(angle);
         update();
     }
 }
+
 void qNormalizeScala(float scala, float *valorScala)
 {
-
     *valorScala = scala;
-
 }
+
 void WidgetOpenGL::setScala(float scala)
 {
     float aux = 1.0/scala;
-    if (scala != valorScala) {
+    if (scala != valorScala) 
+    {
         float aux = 1.0/valorScala;
         base.scale(aux,aux,aux);
         valorScala= scala;
         emit ScalaChanged(scala);
         base.scale(valorScala,valorScala,valorScala);
         update();
-
     }
     qNormalizeScala(scala,&valorScala);
 }
 
-void WidgetOpenGL::drawCono(){
+void WidgetOpenGL::drawCono()
+{
     float conePositions[150]={0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-                    0.0f,0.0f, 1.0f, (float)sin(0.261667)*1.0f, (float)cos(0.261667)*1.0f, 0.0f, 0.0f, 0.0f, 1.0f, (float)sin(0.523333)*1.0f,(float) cos(0.523333)*1.0f, 0.0f,
-                    0.0f, 0.0f, 1.0f, (float)sin(0.785)*1.0f, (float)cos(0.785)*1.0f, 0.0f, 0.0f, 0.0f, 1.0f, (float)sin(1.04667)*1.0f, (float)cos(1.04667)*1.0f, 0.0f,
-                    0.0f, 0.0f, 1.0f,(float)sin(1.30833)*1.0f, (float)cos(1.30833)*1.0f, 0.0f, 0.0f, 0.0f,1.0f, (float)sin(1.57)*1.0f,(float) cos(1.57)*1.0f, 0.0f,
-                    0.0f, 0.0f, 1.0f, (float)sin(1.83167)*1.0f,(float) cos(1.83167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float) sin(2.09333)*1.0f, (float)cos(2.09333)*1.0f, 0.0f ,
-                    0.0f ,0.0f, 1.0f,(float)sin(2.355)*1.0f,(float) cos(2.355)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(2.61667)*1.0f, (float)cos(2.61667)*1.0f, 0.0f ,
-                    0.0f ,0.0f, 1.0f,(float)sin(2.87833)*1.0f, (float)cos(2.87833)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(3.14)*1.0f,(float) cos(3.14)*1.0f, 0.0f ,
-                    0.0f ,0.0f, 1.0f,(float)sin(3.40167)*1.0f,(float) cos(3.40167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(3.66333)*1.0f, (float)cos(3.66333)*1.0f, 0.0f ,
-                    0.0f ,0.0f, 1.0f,(float)sin(3.925)*1.0f, (float)cos(3.925)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(4.18667)*1.0f, (float)cos(4.18667)*1.0f, 0.0f ,
-                    0.0f ,0.0f, 1.0f,(float)sin(4.44833)*1.0f, (float)cos(4.44833)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(4.71)*1.0f, (float)cos(4.71)*1.0f, 0.0f ,
-                    0.0f ,0.0f, 1.0f,(float)sin(4.97167)*1.0f,(float) cos(4.97167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(5.23333)*1.0f, (float)cos(5.23333)*1.0f, 0.0f ,
-                    0.0f ,0.0f, 1.0f,(float)sin(5.495)*1.0f, (float)cos(5.495)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(5.75667)*1.0f, (float)cos(5.75667)*1.0f, 0.0f ,
-                    0.0f ,0.0f, 1.0f,(float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f, 0.0f ,0.0f, 1.0f,(float)sin(6.28)*1.0f, (float)cos(6.28)*1.0f, 0.0f
+            0.0f,0.0f, 1.0f, (float)sin(0.261667)*1.0f, (float)cos(0.261667)*1.0f, 0.0f, 0.0f, 0.0f, 1.0f, (float)sin(0.523333)*1.0f,(float) cos(0.523333)*1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, (float)sin(0.785)*1.0f, (float)cos(0.785)*1.0f, 0.0f, 0.0f, 0.0f, 1.0f, (float)sin(1.04667)*1.0f, (float)cos(1.04667)*1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f,(float)sin(1.30833)*1.0f, (float)cos(1.30833)*1.0f, 0.0f, 0.0f, 0.0f,1.0f, (float)sin(1.57)*1.0f,(float) cos(1.57)*1.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, (float)sin(1.83167)*1.0f,(float) cos(1.83167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float) sin(2.09333)*1.0f, (float)cos(2.09333)*1.0f, 0.0f ,
+            0.0f ,0.0f, 1.0f,(float)sin(2.355)*1.0f,(float) cos(2.355)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(2.61667)*1.0f, (float)cos(2.61667)*1.0f, 0.0f ,
+            0.0f ,0.0f, 1.0f,(float)sin(2.87833)*1.0f, (float)cos(2.87833)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(3.14)*1.0f,(float) cos(3.14)*1.0f, 0.0f ,
+            0.0f ,0.0f, 1.0f,(float)sin(3.40167)*1.0f,(float) cos(3.40167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(3.66333)*1.0f, (float)cos(3.66333)*1.0f, 0.0f ,
+            0.0f ,0.0f, 1.0f,(float)sin(3.925)*1.0f, (float)cos(3.925)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(4.18667)*1.0f, (float)cos(4.18667)*1.0f, 0.0f ,
+            0.0f ,0.0f, 1.0f,(float)sin(4.44833)*1.0f, (float)cos(4.44833)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(4.71)*1.0f, (float)cos(4.71)*1.0f, 0.0f ,
+            0.0f ,0.0f, 1.0f,(float)sin(4.97167)*1.0f,(float) cos(4.97167)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(5.23333)*1.0f, (float)cos(5.23333)*1.0f, 0.0f ,
+            0.0f ,0.0f, 1.0f,(float)sin(5.495)*1.0f, (float)cos(5.495)*1.0f, 0.0f,0.0f, 0.0f, 1.0f,(float)sin(5.75667)*1.0f, (float)cos(5.75667)*1.0f, 0.0f ,
+            0.0f ,0.0f, 1.0f,(float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f, 0.0f ,0.0f, 1.0f,(float)sin(6.28)*1.0f, (float)cos(6.28)*1.0f, 0.0f
 
-        };
-        //ESTE ES LA TAPITA DEL CONO
-        float circlePositions[81]={0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
-                         (float)sin(0.261667)*1.0f, (float) cos(0.261667)*1.0f, 0.0f, (float) sin(0.523333)*1.0f, (float)cos(0.523333)*1.0f, 0.0f,
-                        (float) sin(0.785)*1.0f, (float)cos(0.785)*1.0f, 0.0f,  (float)sin(1.04667)*1.0f, (float)cos(1.04667)*1.0f, 0.0f,
-                        (float)sin(1.30833)*1.0f, (float)cos(1.30833)*1.0f, 0.0f,  (float)sin(1.57)*1.0f, (float)cos(1.57)*1.0f, 0.0f,
-                         (float)sin(1.83167)*1.0f, (float)cos(1.83167)*1.0f, 0.0f,(float) sin(2.09333)*1.0f, (float)cos(2.09333)*1.0f, 0.0f ,
-                        (float)sin(2.355)*1.0f,(float) cos(2.355)*1.0f, 0.0f,(float)sin(2.61667)*1.0f, (float)cos(2.61667)*1.0f, 0.0f ,
-                        (float)sin(2.87833)*1.0f,(float) cos(2.87833)*1.0f, 0.0f,(float)sin(3.14)*1.0f, (float)cos(3.14)*1.0f, 0.0f ,
-                        (float)sin(3.40167)*1.0f, (float)cos(3.40167)*1.0f, 0.0f,(float)sin(3.66333)*1.0f, (float)cos(3.66333)*1.0f, 0.0f ,
-                        (float)sin(3.925)*1.0f, (float)cos(3.925)*1.0f, 0.0f,(float)sin(4.18667)*1.0f, (float)cos(4.18667)*1.0f, 0.0f ,
-                        (float)sin(4.44833)*1.0f, (float)cos(4.44833)*1.0f, 0.0f,(float)sin(4.71)*1.0f, (float)cos(4.71)*1.0f, 0.0f ,
-                        (float)sin(4.97167)*1.0f,(float) cos(4.97167)*1.0f, 0.0f,(float)sin(5.23333)*1.0f, (float)cos(5.23333)*1.0f, 0.0f ,
-                        (float)sin(5.495)*1.0f, (float)cos(5.495)*1.0f, 0.0f,(float)sin(5.75667)*1.0f,(float) cos(5.75667)*1.0f, 0.0f ,
-                        (float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f,(float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f
-                        ,(float)sin(6.28)*1.0f, (float)cos(6.28)*1.0f, 0.0f
+    };
+        
+    float circlePositions[81]={0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+            (float)sin(0.261667)*1.0f, (float) cos(0.261667)*1.0f, 0.0f, (float) sin(0.523333)*1.0f, (float)cos(0.523333)*1.0f, 0.0f,
+            (float) sin(0.785)*1.0f, (float)cos(0.785)*1.0f, 0.0f,  (float)sin(1.04667)*1.0f, (float)cos(1.04667)*1.0f, 0.0f,
+            (float)sin(1.30833)*1.0f, (float)cos(1.30833)*1.0f, 0.0f,  (float)sin(1.57)*1.0f, (float)cos(1.57)*1.0f, 0.0f,
+            (float)sin(1.83167)*1.0f, (float)cos(1.83167)*1.0f, 0.0f,(float) sin(2.09333)*1.0f, (float)cos(2.09333)*1.0f, 0.0f ,
+            (float)sin(2.355)*1.0f,(float) cos(2.355)*1.0f, 0.0f,(float)sin(2.61667)*1.0f, (float)cos(2.61667)*1.0f, 0.0f ,
+            (float)sin(2.87833)*1.0f,(float) cos(2.87833)*1.0f, 0.0f,(float)sin(3.14)*1.0f, (float)cos(3.14)*1.0f, 0.0f ,
+            (float)sin(3.40167)*1.0f, (float)cos(3.40167)*1.0f, 0.0f,(float)sin(3.66333)*1.0f, (float)cos(3.66333)*1.0f, 0.0f ,
+            (float)sin(3.925)*1.0f, (float)cos(3.925)*1.0f, 0.0f,(float)sin(4.18667)*1.0f, (float)cos(4.18667)*1.0f, 0.0f ,
+            (float)sin(4.44833)*1.0f, (float)cos(4.44833)*1.0f, 0.0f,(float)sin(4.71)*1.0f, (float)cos(4.71)*1.0f, 0.0f ,
+            (float)sin(4.97167)*1.0f,(float) cos(4.97167)*1.0f, 0.0f,(float)sin(5.23333)*1.0f, (float)cos(5.23333)*1.0f, 0.0f ,
+            (float)sin(5.495)*1.0f, (float)cos(5.495)*1.0f, 0.0f,(float)sin(5.75667)*1.0f,(float) cos(5.75667)*1.0f, 0.0f ,
+            (float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f,(float)sin(6.01833)*1.0f, (float)cos(6.01833)*1.0f, 0.0f,
+            (float)sin(6.28)*1.0f, (float)cos(6.28)*1.0f, 0.0f
 
-            };
-
-
-
+    };
 
     vaoCono.create();
     vaoCono.bind();
@@ -141,10 +146,7 @@ void WidgetOpenGL::drawCono(){
     m_program->enableAttributeArray("position");
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
 
-
     vaoCono.release();
-
-
 
     vaoCono1.create();
     vaoCono1.bind();
@@ -156,16 +158,14 @@ void WidgetOpenGL::drawCono(){
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
     vaoCono1.release();
 
-
-
-
 }
-void WidgetOpenGL::drawCylinder(){
+void WidgetOpenGL::drawCylinder()
+{
     int i = 0;
-    for (i = 0; i <= 360; i += 15){
+    for (i = 0; i <= 360; i += 15)
+    {
          float p = i * 3.14 / 180;
          m_points_Cylinder<<sin(p)<<cos(p)<<0.0f;
-
          m_points_Cylinder<<sin(p)<<cos(p)<<1.0f;
     }
     vaoCylinder.create();
@@ -179,16 +179,17 @@ void WidgetOpenGL::drawCylinder(){
     vaoCylinder.release();
 
 }
-void WidgetOpenGL::drawSphere(int x, int y){
-
+void WidgetOpenGL::drawSphere(int x, int y)
+{
     vaoSphere.destroy();
         vboSphere.destroy();
         m_points.clear();
-
         float r=1.0;
         int angleSpan =  (250 - x - y)/10;
-        for(int vAngle = -90; vAngle < 90; vAngle = vAngle + angleSpan){
-            for(int hAngle = 0; hAngle <= 360; hAngle = hAngle + angleSpan){
+        for(int vAngle = -90; vAngle < 90; vAngle = vAngle + angleSpan)
+        {
+            for(int hAngle = 0; hAngle <= 360; hAngle = hAngle + angleSpan)
+            {
                 float x0 = r * qCos(vAngle * PI / 180) * qCos(hAngle * PI / 180);
                 float y0 = r * qCos(vAngle * PI / 180) * qSin(hAngle * PI / 180);
                 float z0 = r * qSin(vAngle * PI / 180);
@@ -222,19 +223,21 @@ void WidgetOpenGL::drawSphere(int x, int y){
 
 }
 
-void WidgetOpenGL::drawgeneral(vector<int> indices,vector<QVector3D> vertices,vector<QVector3D> normal,int numberVer){
+void WidgetOpenGL::drawgeneral(vector<int> indices,vector<QVector3D> vertices,vector<QVector3D> normal,int numberVer)
+{
     vector<float> pvalues;
     vector<float> nvalues;
     vector<float> normales;
-       // m_program->bind();
-    for (int i = 0; i < numgeneralInd; i++) {
+     
+    for (int i = 0; i < numgeneralInd; i++)
+    {
          pvalues.push_back((vertices[indices[i]]).x());
          pvalues.push_back((vertices[indices[i]]).y());
          pvalues.push_back((vertices[indices[i]]).z());
          nvalues.push_back((normal[indices[i]]).x());
          nvalues.push_back((normal[indices[i]]).y());
          nvalues.push_back((normal[indices[i]]).z());
-  }
+    }
 
     vaogeneral.bind();
     vbogeneral.bind();
@@ -243,42 +246,29 @@ void WidgetOpenGL::drawgeneral(vector<int> indices,vector<QVector3D> vertices,ve
     vbogeneral1.allocate(&nvalues[0],nvalues.size()*4);
     vbogeneral2.bind();
     vbogeneral2.allocate(&indices[0],indices.size()*4);
-    for (int i = 0; i <numberVer; i++) {
-              normales.push_back(normal[i].x());
-              normales.push_back(normal[i].y());
-              normales.push_back(normal[i].z());
-              normales.push_back(normal[i].x()+normal[i].x()*0.2);
-              normales.push_back(normal[i].y()+normal[i].y()*0.2);
-              normales.push_back(normal[i].z()+normal[i].z()*0.2);
-         }
+    for (int i = 0; i <numberVer; i++) 
+    {
+        normales.push_back(normal[i].x());
+        normales.push_back(normal[i].y());
+        normales.push_back(normal[i].z());
+        normales.push_back(normal[i].x()+normal[i].x()*0.2);
+        normales.push_back(normal[i].y()+normal[i].y()*0.2);
+        normales.push_back(normal[i].z()+normal[i].z()*0.2);
+    }
+
     vbogeneral3.bind();
     vbogeneral3.allocate(&normales[0],normales.size()*4);
     vbogeneral.bind();
-    //m_program->enableAttributeArray("position");
-  //  m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
 }
 
 void WidgetOpenGL::initializeGL()
 {
 
-    /*
-    luces = new QOpenGLShaderProgram();
-    luces->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/Light_Vertex.glsl");
-    luces->addShaderFromSourceFile(QOpenGLShader::Fragment,":/Light_Fragment.glsl");
-    luces->link();
-    vaoluz.create();
-    vaoluz.bind();
-    vboluz.create();
-    vbo1luz.create();
-    vboluz.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    vbo1luz.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);*/
 
     m_program = new QOpenGLShaderProgram();
     m_program->addShaderFromSourceCode(QOpenGLShader::Vertex,
-                                       "#version 450\n" //GLSL version 1.4
-                                       "in vec3 position;\n" //attribute named position with 3 elements per vertex in
+                                       "#version 450\n" 
+                                       "in vec3 position;\n" 
                                        "in vec3 color;\n"
                                        "out vec4 fragColor;\n"
                                        "uniform mat4 mv_matrix;\n"
@@ -288,17 +278,15 @@ void WidgetOpenGL::initializeGL()
                                        "}\n"
                                        );
     m_program->addShaderFromSourceCode(QOpenGLShader::Fragment,
-                                       "#version 450\n" //GLSL version 1.4
+                                       "#version 450\n" 
                                        "in vec4 fragColor;\n"
                                        "out vec4 finalcolor;\n"
                                        "void main() {\n"
                                        "    finalcolor = fragColor;\n"
                                        "}\n"
                                        );
-    //m_program->setUniformValue()
     m_program->link();
     m_program->bind();
-
     vaogeneral.create();
     vaogeneral.bind();
     vbogeneral.create();
@@ -328,27 +316,28 @@ void WidgetOpenGL::initializeGL()
 
 
     float cubePositions[108] = { -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,
-                -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f,
-                -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f,
-                1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f,
-                1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f,
-                -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f,
-                -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,
-                -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f,
-                1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
-                -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
-                1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f
+        -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f,
+        -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f, -1.0f,
+        -1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f
     };
 
-    //Inicializa la matrix
+   
     base = QTransform();
-    //Altera rotaciones iniciales de la figura
+  
     base.rotate(xRot,1.0f,0.0f,0.0f);
     base.rotate(yRot,0.0f,1.0f,0.0f);
     base.rotate(zRot,0.0f,0.0f,1.0f);
     base.scale(valorScala);
 
-    float ejeX[]= {
+    float ejeX[]=
+    {
         0.0,0.0,0.0,
         5.0,0.0,0.0
     };
@@ -362,7 +351,8 @@ void WidgetOpenGL::initializeGL()
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
     vaoX.release();
 
-    float ejeY[]= {
+    float ejeY[]=
+    {
         0.0,0.0,0.0,
         0.0,5.0,0.0
     };
@@ -376,10 +366,12 @@ void WidgetOpenGL::initializeGL()
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
     vaoY.release();
 
-    float ejeZ[]= {
+    float ejeZ[]=
+    {
         0.0,0.0,0.0,
         0.0,0.0,5.0
     };
+
     vaoZ.create();
     vaoZ.bind();
     vboZ.create();
@@ -389,9 +381,6 @@ void WidgetOpenGL::initializeGL()
     m_program->enableAttributeArray("position");
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
     vaoZ.release();
-
-
-
 
     vao1.create();
     vao1.bind();
@@ -403,27 +392,23 @@ void WidgetOpenGL::initializeGL()
     m_program->setAttributeBuffer("position", GL_FLOAT, 0, 3);
 
     vao1.release();
-
-
     drawCono();
 
-    //Para pasar color a shader
     m_program->setAttributeValue("color",QVector3D(0,1,0));
-    //Pasar escalamiento y rotacion a shader
-    m_program->setUniformValue("mv_matrix",base);
 
+    m_program->setUniformValue("mv_matrix",base);
     m_program->release();
     vaoluz.release();
     vboluz.release();
     vbo1luz.release();
-
-
 }
 
 void WidgetOpenGL::resizeGL(int w, int h)
 {
+
 }
-void WidgetOpenGL::drawAxis(){
+void WidgetOpenGL::drawAxis()
+{
     vaoX.bind();
     m_program->setAttributeValue("color",QVector3D(1,0,0));
     glDrawArrays(GL_LINE_LOOP, 0, 2);
@@ -435,6 +420,7 @@ void WidgetOpenGL::drawAxis(){
     vaoZ.bind();
     m_program->setAttributeValue("color",QVector3D(0,1,1));
     glDrawArrays(GL_LINE_LOOP, 0, 2);
+
 }
 
 void WidgetOpenGL::paintGL()
@@ -445,17 +431,19 @@ void WidgetOpenGL::paintGL()
     m_program->setUniformValue("mv_matrix",base);
     drawAxis();
 
-    if(smooth){
-        if (f1){
+    if(smooth)
+    {
+        if (f1)
+        {
             vao1.bind();
             m_program->setAttributeValue("color",QVector3D(0,1,0));
             glDrawArrays(GL_TRIANGLES, 0, 36);
             update();
         }
-        if (f2){
+        if (f2)
+        {
 
             drawSphere(x,y);
-            //vaoluz.bind();
             vaoSphere.bind();
             m_program->setAttributeValue("color",QVector3D(1,0,0));
 
@@ -463,46 +451,37 @@ void WidgetOpenGL::paintGL()
             update();
 
         }
-        if(f3){
-            /*
-            vaoCono.bind();
-            m_program->setAttributeValue("color",QVector3D(1,0,0));
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 50);
-
-            vaoCono1.bind();
-            m_program->setAttributeValue("color",QVector3D(1,0,0));
-            glDrawArrays(GL_TRIANGLE_FAN, 0, 27);
-            update();*/
-
+        if(f3)
+        {
+           
             cono cone(x,y);
-                        vector<int> indices = cone.getIndices();
-                        vector<QVector3D> vertices = cone.getVertices();
-                        vector<QVector3D> normal = cone.getNormals();
-                        numgeneralInd= cone.getNumIndices();
-                        int numberVer = cone.getNumVertices();
-                        drawgeneral(indices,vertices,normal,numberVer);
-                        m_program->setAttributeValue("color",QVector3D(1,0,1));
-                        glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
-                        update();
+            vector<int> indices = cone.getIndices();
+            vector<QVector3D> vertices = cone.getVertices();
+            vector<QVector3D> normal = cone.getNormals();
+            numgeneralInd= cone.getNumIndices();
+            int numberVer = cone.getNumVertices();
+            drawgeneral(indices,vertices,normal,numberVer);
+            m_program->setAttributeValue("color",QVector3D(1,0,1));
+            glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
+            update();
 
         }
-        if(f4){
+        if(f4)
+        {
             cilindro cylinder(x,y);
             vector<int> indices = cylinder.getIndices();
             vector<QVector3D> vertices = cylinder.getVertices();
             vector<QVector3D> normal = cylinder.getNormals();
             numgeneralInd= cylinder.getNumIndices();
             int numberVer = cylinder.getNumVertices();
-
             drawgeneral(indices,vertices,normal,numberVer);
-
             m_program->setAttributeValue("color",QVector3D(0,1,1));
-
             glDrawArrays(GL_TRIANGLES,0,numgeneralInd);
             update();
 
         }
-        if(f5){
+        if(f5)
+        {
             toroide torus(x,y);
             vector<int> indices = torus.getIndices();
             vector<QVector3D> vertices = torus.getVertices();
@@ -515,21 +494,24 @@ void WidgetOpenGL::paintGL()
             update();
         }
     }
-    if(wire){
-        if (f1){
-
+    if(wire)
+    {
+        if (f1)
+        {
             vao1.bind();
             m_program->setAttributeValue("color",QVector3D(1,1,0));
             glDrawArrays(GL_LINES, 0, 36);
             update();
 
         }
-        if (f2){
+        if (f2)
+        {
             m_program->setAttributeValue("color",QVector3D(1,1,0));
             glDrawArrays(GL_LINES,0,m_points.count()/3);
             update();
         }
-        if(f3){
+        if(f3)
+        {
             cono cone(x,y);
             vector<int> indices = cone.getIndices();
             vector<QVector3D> vertices = cone.getVertices();
@@ -538,25 +520,28 @@ void WidgetOpenGL::paintGL()
             int numberVer = cone.getNumVertices();
             drawgeneral(indices,vertices,normal,numberVer);
             m_program->setAttributeValue("color",QVector3D(1,1,0));
-            for(int i=0; i<numgeneralInd/3 ; i++){
+            for(int i=0; i<numgeneralInd/3 ; i++)
+            {
                   glDrawArrays(GL_LINE_LOOP, i*3,3 );
             }
         }
-        if(f4){
+        if(f4)
+        {
             cilindro cylinder(x,y);
             vector<int> indices = cylinder.getIndices();
             vector<QVector3D> vertices = cylinder.getVertices();
             vector<QVector3D> normal = cylinder.getNormals();
             numgeneralInd= cylinder.getNumIndices();
             int numberVer = cylinder.getNumVertices();
-
             drawgeneral(indices,vertices,normal,numberVer);
             m_program->setAttributeValue("color",QVector3D(1,1,0));
-            for(int i=0; i<numgeneralInd/3 ; i++){
+            for(int i=0; i<numgeneralInd/3 ; i++)
+            {
                 glDrawArrays(GL_LINE_LOOP, i*3,3 );
             }
         }
-        if(f5){
+        if(f5)
+        {
             toroide torus(x,y);
             vector<int> indices = torus.getIndices();
             vector<QVector3D> vertices = torus.getVertices();
@@ -565,12 +550,11 @@ void WidgetOpenGL::paintGL()
             int numberVer = torus.getNumVertices();
             drawgeneral(indices,vertices,normal,numberVer);
             m_program->setAttributeValue("color",QVector3D(1,1,0));
-            for(int i=0; i<numgeneralInd/3 ; i++){
+            for(int i=0; i<numgeneralInd/3 ; i++)
+            {
                 glDrawArrays(GL_LINE_LOOP, i*3,3 );
-             }
+            }
         }
     }
-
-
 }
 
